@@ -1,4 +1,3 @@
-// Hero prefab
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame); 
@@ -12,7 +11,32 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // set physics properties
         this.setGravityY(2000);
         this.body.setCollideWorldBounds(true);
+        this.setImmovable();
 
+
+    }
+    
+    on_ground_refresh(){
+        this.setGravityY(2000);
+        this.jumps = 2;
+        this.clearTint();
+    }
+
+    jump_cancel_refresh(){
+
+    }
+
+    on_hit(){
+        this.setGravityY(2000);
+        this.body.setVelocityX(-500);
+        this.body.setVelocityY(-500);
+        this.setTint(0x303030);
+    }
+
+    jump(){
+        this.jumps--;
+        this.body.setVelocityY(-1000);
+        this.setTint(0xFF8080);
 
     }
 }
@@ -25,8 +49,15 @@ class IdleState extends State {
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
 
+        //collision
+        if(this.stateMachine.collision){
+            this.stateMachine.transition('onhit');
+            return;
+        }
+
         // transition to jump if space pressed
         if(Phaser.Input.Keyboard.JustDown(space)) {
+            self.jump();
             this.stateMachine.transition('jump');
             return;
         }
@@ -43,6 +74,12 @@ class MoveState extends State {
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
 
+        //collision
+        if(this.stateMachine.collision){
+            this.stateMachine.transition('onhit');
+            return;
+        }
+
         // transition to idle if not pressing movement keys
         if(!(left.isDown || right.isDown)) {
             this.stateMachine.transition('idle');
@@ -50,6 +87,7 @@ class MoveState extends State {
         }
         // transition to jump if space pressed
         if(Phaser.Input.Keyboard.JustDown(space)) {
+            self.jump();
             this.stateMachine.transition('jump');
             return;
         }
@@ -66,20 +104,22 @@ class MoveState extends State {
 
 class JumpState extends State {
     enter(scene, self){
-        self.jumps--;
-        self.body.setVelocityY(-1000);
-        self.setTint(0xFF8080);
     }
 
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
         const AKey = scene.keys.AKey;
 
+        //collision
+        if(this.stateMachine.collision){
+            this.stateMachine.transition('onhit');
+            return;
+        }
+
         // transition to idle on first touching ground
         if(self.body.deltaY() > 0 && self.body.onFloor()){
             this.stateMachine.transition('idle');
-            self.jumps = 2;
-            self.clearTint();
+            self.on_ground_refresh();
             return;
         }
 
@@ -125,14 +165,35 @@ class KickState extends State {
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
 
+        if(this.stateMachine.collision){
+            this.stateMachine.transition('onhit');
+            return;
+        }
+
         // transition to idle on first touching ground
         if(self.body.deltaY() > 0 && self.body.onFloor()){
             this.stateMachine.transition('idle');
-            self.jumps = 2;
-            self.clearTint();
-            self.setGravityY(2000);
+            self.on_ground_refresh();
             return;
         }
+    }
+
+}
+
+class OnHitState extends State {
+    enter(scene, self){
+
+        self.on_hit();
+
+        scene.time.delayedCall(500, () => {
+            this.stateMachine.transition('jump');
+            this.stateMachine.collision = false;
+            self.clearTint();
+        });
+    }
+
+    execute(scene, self){
+        const { left, right, up, down, space, shift } = scene.keys;
     }
 
 }
