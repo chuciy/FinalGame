@@ -27,6 +27,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     on_hit(direction){
+        this.scene.sound.play("se0");
         this.setGravityY(2000);
         this.body.setVelocityX(500 * direction);
         this.body.setVelocityY(-1100);

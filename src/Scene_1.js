@@ -6,6 +6,9 @@ class Scene_1 extends Phaser.Scene {
     preload() {
         this.load.image('player', 'assets/player.png');
         this.load.image('boss', 'assets/boss.png');
+
+
+        this.load.audio('se0', 'assets/se0.wav');
     }
 
     create() {
@@ -20,8 +23,6 @@ class Scene_1 extends Phaser.Scene {
         this.bossFSM = new StateMachine("idle_boss", {
             idle_boss: new IdleState_Boss(),
             onhit_boss : new OnHitState_Boss(),
-
-
 
 
         }, [this, this.boss]);
@@ -44,6 +45,8 @@ class Scene_1 extends Phaser.Scene {
         //keys
         this.keys = this.input.keyboard.createCursorKeys();
         this.keys.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
+        document.getElementById('info').innerHTML = '<strong>Operation:</strong> Arrows move, SPACE jump, [A] kick';
 
     }
 
