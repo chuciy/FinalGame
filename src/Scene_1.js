@@ -12,9 +12,19 @@ class Scene_1 extends Phaser.Scene {
         //UI
         this.cameras.main.setBackgroundColor('#FACADE');
 
+        //collision info
+        this.x_p2b = 500;       // x distance from player to boss: boss.x - player.x
 
         //enemy
         this.boss = new Boss(this, 700, 700, 'boss', 0);
+        this.bossFSM = new StateMachine("idle_boss", {
+            idle_boss: new IdleState_Boss(),
+            onhit_boss : new OnHitState_Boss(),
+
+
+
+
+        }, [this, this.boss]);
 
         //player
         this.player = new Player(this, 200, 700, 'player', 0);
@@ -38,14 +48,19 @@ class Scene_1 extends Phaser.Scene {
     }
 
     update(){
+        this.x_p2b = this.boss.body.x - this.player.body.x;
+
         this.physics.world.collide(this.player, this.boss, this.onCollision, null, this);
 
         this.playerFSM.step();
+        this.bossFSM.step();
     }
 
     onCollision(){
-        console.log("h");
+
         this.playerFSM.collision = true;
+        this.bossFSM.collision = true;
+
     }
 
 

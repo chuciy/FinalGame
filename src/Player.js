@@ -26,10 +26,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-    on_hit(){
+    on_hit(direction){
         this.setGravityY(2000);
-        this.body.setVelocityX(-500);
-        this.body.setVelocityY(-500);
+        this.body.setVelocityX(500 * direction);
+        this.body.setVelocityY(-1100);
         this.setTint(0x303030);
     }
 
@@ -136,11 +136,11 @@ class JumpState extends State {
             return;
         }
 
-        // handle movement, allowing slower adjustment in direction
+        // handle movement
         if(left.isDown) {
-            self.body.setVelocityX(-self.speed * 0.75);
+            self.body.setVelocityX(-self.speed * 1);
         } else if(right.isDown) {
-            self.body.setVelocityX( self.speed * 0.75);
+            self.body.setVelocityX( self.speed * 1);
         }
     }
 
@@ -166,6 +166,9 @@ class KickState extends State {
         const { left, right, up, down, space, shift } = scene.keys;
 
         if(this.stateMachine.collision){
+            //successfull kick 
+            self.jumps++;
+
             this.stateMachine.transition('onhit');
             return;
         }
@@ -183,9 +186,14 @@ class KickState extends State {
 class OnHitState extends State {
     enter(scene, self){
 
-        self.on_hit();
+        if(scene.x_p2b >= 0){
+            // bounce off to left
+            self.on_hit(-1);
+        }else{
+            self.on_hit(1);
+        }
 
-        scene.time.delayedCall(500, () => {
+        scene.time.delayedCall(250, () => {
             this.stateMachine.transition('jump');
             this.stateMachine.collision = false;
             self.clearTint();
