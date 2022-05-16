@@ -6,8 +6,12 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 
         // set properties
-        this.speed = 200;
-        this.jumps = 2;
+        this.shoot_cd = 1000;
+        this.can_shoot = true;
+
+
+        this.projectiles = new Arrows(scene);
+
         // set physics properties
         this.setGravityY(2000);
         this.body.setCollideWorldBounds(true);
@@ -36,6 +40,16 @@ class IdleState_Boss extends State {
             this.stateMachine.transition('onhit_boss');
             return;
         }
+
+        //
+        if(self.can_shoot){
+            self.projectiles.fire_arrow(scene.bx, scene.by, scene.px, scene.py);
+            self.can_shoot = false;
+            scene.time.delayedCall(self.shoot_cd, () => {
+                self.projectiles.fire_arrow(scene.bx, scene.by, scene.px, scene.py);
+                self.can_shoot = true;
+            });
+        }
     }
 
 }
@@ -58,7 +72,6 @@ class OnHitState_Boss extends State {
     }
 
     execute(scene, self){
-        const { left, right, up, down, space, shift } = scene.keys;
     }
 
 }

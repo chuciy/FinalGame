@@ -1,6 +1,11 @@
+const WIDTH = 1200;
+const HEIGHT = 675;
+
+
+
 let game = new Phaser.Game({
-    width: 1200,
-    height: 675,
+    width: WIDTH,
+    height: HEIGHT,
     //zoom: 1,
     scene: [Scene_1],
     physics: {
