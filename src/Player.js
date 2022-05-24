@@ -128,6 +128,7 @@ class JumpState extends State {
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
         const AKey = scene.keys.AKey;
+        const DKey = scene.keys.DKey;
 
         //collision
         if(this.stateMachine.collision){
@@ -149,8 +150,14 @@ class JumpState extends State {
             return;
         }
 
+        // Input
         if(Phaser.Input.Keyboard.JustDown(AKey)) {
             this.stateMachine.transition('kick');
+            return;
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(DKey)) {
+            this.stateMachine.transition('block');
             return;
         }
 
@@ -249,6 +256,30 @@ class OnHitState_Arrow extends State {
 
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
+    }
+
+}
+
+// changes gravity
+class BlockState extends State {
+    enter(scene, self){
+        self.setVelocity(0.5 * self.body.velocity.x, 0.07 * self.body.velocity.y);
+        self.setGravityY(0);
+        self.setTint(0x10c688);
+
+        scene.time.delayedCall(500, () => {
+            if(self.body.onFloor()){
+                this.stateMachine.transition('idle');
+            }else{
+                this.stateMachine.transition('jump');
+            }
+            self.setGravityY(2000);
+            self.clearTint();
+        });
+    }
+
+    execute(scene, self){
+
     }
 
 }

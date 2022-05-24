@@ -41,7 +41,8 @@ class Scene_1 extends Phaser.Scene {
             jump: new JumpState(),
             kick: new KickState(),
             onhit: new OnHitState(),
-            onhit_arrow: new OnHitState_Arrow()
+            onhit_arrow: new OnHitState_Arrow(),
+            block: new BlockState()
 
 
         }, [this, this.player]);
@@ -52,8 +53,9 @@ class Scene_1 extends Phaser.Scene {
         //keys
         this.keys = this.input.keyboard.createCursorKeys();
         this.keys.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-        document.getElementById('info').innerHTML = '<strong>Operation:</strong> Arrows move, SPACE jump, [A] kick\n';
+        document.getElementById('info').innerHTML = '<strong>Operation:</strong> Arrows move, SPACE jump, [A] kick, [D] block\n';
 
     }
 

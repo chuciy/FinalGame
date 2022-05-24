@@ -184,8 +184,8 @@ class AI_P2 extends State {
 
         //Default behavior always activated in P2 state:
         //try to approch player
-        let dx = Math.max(Math.abs(scene.x_p2b) , 400);
-        self.setVelocityX(-scene.dir * dx);
+        let dx = Math.max(Math.abs(scene.x_p2b) , 400) / 400;
+        self.setVelocityX(-scene.dir * dx * dx * 350);
 
 
         //Random decision
@@ -196,11 +196,12 @@ class AI_P2 extends State {
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.5){
+            if(rdm >= 0.66){
                 this.stateMachine.transition('AI_P1');
             }else{
                 //test
-                self.setVelocityY(-300);
+                console.log("p2_sub1");
+                self.setVelocity((Math.random() - 0.5) * 200, -500);
             }
         }
     }
