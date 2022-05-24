@@ -19,7 +19,13 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 
         //states
-        this.states = ['AI_P1', 'AI_P2'];
+        this.BASIC_STATES = {
+            idle: 'idle_boss',
+            AI_P1: 'AI_P1',
+            AI_P2: "AI_P2"
+        }
+        this.basic_state = this.BASIC_STATES.idle;
+
         this.in_behavior = false;
     }
 
@@ -32,7 +38,8 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 class IdleState_Boss extends State {
     enter(scene, self){
-        console.log("idle");
+        console.log("in_idle");
+        this.basic_state = self.BASIC_STATES.idle;
         self.clearTint();
        
     }
@@ -48,13 +55,15 @@ class IdleState_Boss extends State {
         //
         if(!self.in_behavior){
             self.in_behavior = true;
-            scene.time.delayedCall(2000, () => {
+            scene.time.delayedCall(800, () => {
                 self.in_behavior = false;
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.5){
+            if(rdm >= 0.66){
                 this.stateMachine.transition('AI_P1');
+            }else if(rdm >= 0.11){
+                this.stateMachine.transition('AI_P2');
             }else{
                 console.log("idle_move");
                 self.setVelocityX((Math.random() - 0.5) * 700);
@@ -68,7 +77,8 @@ class IdleState_Boss extends State {
 
 class AI_P1 extends State {
     enter(scene, self){
-        console.log("Ai_p1");
+        this.basic_state = self.BASIC_STATES.AI_P1;
+        console.log("Enter Basic_state: " + this.basic_state);
         self.setTint(0x00FFFF);
 
     }
@@ -79,6 +89,8 @@ class AI_P1 extends State {
             return;
         }
 
+
+        //Default behavior always activated in P1 state:
         //try to keep certain distance with player
         let dx = Math.abs(scene.x_p2b);
         if(dx <= 500){
@@ -86,8 +98,7 @@ class AI_P1 extends State {
         }else{
             self.setVelocityX(-scene.dir * (dx - 300) * 0.8);
         }
-
-
+        //Shoot arrows in parabola
         if(self.can_shoot){
             self.projectiles.fire_arrow(scene.bx, scene.by, scene.px, scene.py);
             self.can_shoot = false;
@@ -96,15 +107,15 @@ class AI_P1 extends State {
             });
         }
 
-        //
+        //Random decision
         if(!self.in_behavior){
             self.in_behavior = true;
-            scene.time.delayedCall(2000, () => {
+            scene.time.delayedCall(3000, () => {
                 self.in_behavior = false;
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.5){
+            if(rdm >= 0.4){
                 this.stateMachine.transition('idle_boss');
             }else{
                 this.stateMachine.transition('P1_sub_1');
@@ -144,13 +155,54 @@ class OnHitState_Boss extends State {
         }
 
         scene.time.delayedCall(250, () => {
-            this.stateMachine.transition('idle_boss');
+            console.log("Collide! Now back to: " + self.basic_state);
+            this.stateMachine.transition(self.basic_state);
             this.stateMachine.collision = false;
             self.clearTint();
         });
     }
 
     execute(scene, self){
+    }
+
+}
+
+class AI_P2 extends State {
+    enter(scene, self){
+        this.basic_state = self.BASIC_STATES.AI_P2;
+        console.log("Enter Basic_state: " + this.basic_state);
+        self.setTint(0xEF12FE);
+
+    }
+
+    execute(scene, self){
+        if(this.stateMachine.collision){
+            this.stateMachine.transition('onhit_boss');
+            return;
+        }
+
+
+        //Default behavior always activated in P2 state:
+        //try to approch player
+        let dx = Math.max(Math.abs(scene.x_p2b) , 400);
+        self.setVelocityX(-scene.dir * dx);
+
+
+        //Random decision
+        if(!self.in_behavior){
+            self.in_behavior = true;
+            scene.time.delayedCall(2000, () => {
+                self.in_behavior = false;
+            });
+
+            let rdm = Math.random();
+            if(rdm >= 0.5){
+                this.stateMachine.transition('AI_P1');
+            }else{
+                //test
+                self.setVelocityY(-300);
+            }
+        }
     }
 
 }

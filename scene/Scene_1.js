@@ -27,6 +27,7 @@ class Scene_1 extends Phaser.Scene {
             idle_boss: new IdleState_Boss(),
             onhit_boss : new OnHitState_Boss(),
             AI_P1 : new AI_P1(),
+            AI_P2 : new AI_P2(),
             P1_sub_1 : new P1_sub_1()
 
 
