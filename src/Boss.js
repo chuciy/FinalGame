@@ -32,7 +32,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 class IdleState_Boss extends State {
     enter(scene, self){
-        self.body.setVelocity(0);
+        console.log("idle");
         self.clearTint();
        
     }
@@ -53,9 +53,10 @@ class IdleState_Boss extends State {
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.3){
+            if(rdm >= 0.5){
                 this.stateMachine.transition('AI_P1');
             }else{
+                console.log("idle_move");
                 self.setVelocityX((Math.random() - 0.5) * 700);
             }
         }
@@ -78,13 +79,12 @@ class AI_P1 extends State {
             return;
         }
 
+        //try to keep certain distance with player
         let dx = Math.abs(scene.x_p2b);
-        let dir = scene.x_p2b > 0 ? 1 : -1;
-
         if(dx <= 500){
-            self.setVelocityX((1 - dx/500) * dir * 500);
+            self.setVelocityX((1 - dx/500) * scene.dir * 500);
         }else{
-            self.setVelocityX(-dir * 500);
+            self.setVelocityX(-scene.dir * (dx - 300) * 0.8);
         }
 
 
@@ -104,7 +104,7 @@ class AI_P1 extends State {
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.9){
+            if(rdm >= 0.5){
                 this.stateMachine.transition('idle_boss');
             }else{
                 this.stateMachine.transition('P1_sub_1');
@@ -116,8 +116,8 @@ class AI_P1 extends State {
 
 class P1_sub_1 extends State {
     enter(scene, self){
-        console.log("s1");
-        self.setVelocityY(-750);
+        console.log("p1_sub1");
+        self.setVelocity(300 * scene.dir, -1200);
         self.setTint(0x66FF22);
         scene.time.delayedCall(1000, () => {
             this.stateMachine.transition('AI_P1');

@@ -15,7 +15,7 @@ class Scene_1 extends Phaser.Scene {
 
     create() {
         //UI
-        this.cameras.main.setBackgroundColor('#101010');
+        this.cameras.main.setBackgroundColor('#DDDDDD');
 
         //collision info
         this.x_p2b = 500;       // x distance from player to boss: boss.x - player.x
@@ -40,6 +40,7 @@ class Scene_1 extends Phaser.Scene {
             jump: new JumpState(),
             kick: new KickState(),
             onhit: new OnHitState(),
+            onhit_arrow: new OnHitState_Arrow()
 
 
         }, [this, this.player]);
@@ -59,18 +60,28 @@ class Scene_1 extends Phaser.Scene {
         this.x_p2b = this.boss.body.x - this.player.body.x;
         this.bx = this.boss.body.x;     this.by = this.boss.body.y;
         this.px = this.player.body.x;   this.py = this.player.body.y;
+        this.dir = this.x_p2b >= 0 ? 1 : -1;
 
-        this.physics.world.collide(this.player, this.boss, this.onCollision, null, this);
+        //collision
+        this.physics.world.collide(this.player, this.boss, this.on_collision_pb, null, this);
+        this.physics.world.collide(this.player, this.boss.projectiles, this.on_arrow_hit_player, null, this);
 
+        //update FSM
         this.playerFSM.step();
         this.bossFSM.step();
     }
 
-    onCollision(){
-
+    on_collision_pb(){
         this.playerFSM.collision = true;
         this.bossFSM.collision = true;
 
+    }
+
+    on_arrow_hit_player(player, arrow){
+        this.playerFSM.collision_arrow = true;
+        arrow.setActive(false);
+        arrow.setVisible(false);
+        arrow.x = -50; arrow.y = -50;
     }
 
 

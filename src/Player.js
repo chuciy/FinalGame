@@ -33,6 +33,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setVelocityY(-1100);
         this.setTint(0x303030);
     }
+    on_hit_arrow(){
+        this.setGravityY(2000);
+        this.body.setVelocity(-this.scene.dir * 100, 0),
+        this.setTint(0xEEDD22);
+    }
+
 
     jump(){
         this.jumps--;
@@ -55,6 +61,12 @@ class IdleState extends State {
             this.stateMachine.transition('onhit');
             return;
         }
+        if(this.stateMachine.collision_arrow){
+            this.stateMachine.transition('onhit_arrow');
+            return;
+        }
+
+
 
         // transition to jump if space pressed
         if(Phaser.Input.Keyboard.JustDown(space)) {
@@ -80,6 +92,12 @@ class MoveState extends State {
             this.stateMachine.transition('onhit');
             return;
         }
+        if(this.stateMachine.collision_arrow){
+            this.stateMachine.transition('onhit_arrow');
+            return;
+        }
+
+
 
         // transition to idle if not pressing movement keys
         if(!(left.isDown || right.isDown)) {
@@ -116,8 +134,15 @@ class JumpState extends State {
             this.stateMachine.transition('onhit');
             return;
         }
+        if(this.stateMachine.collision_arrow){
+            this.stateMachine.transition('onhit_arrow');
+            return;
+        }
+
+
 
         // transition to idle on first touching ground
+        //self.body.deltaY() > 0 && 
         if(self.body.deltaY() > 0 && self.body.onFloor()){
             this.stateMachine.transition('idle');
             self.on_ground_refresh();
@@ -148,6 +173,7 @@ class JumpState extends State {
 }
 
 
+//Kick state changes gravity and it need to be set back to 2000 when entering other state
 class KickState extends State {
     enter(scene, self){
         let direction = self.body.velocity.x;
@@ -169,8 +195,11 @@ class KickState extends State {
         if(this.stateMachine.collision){
             //successfull kick 
             self.jumps++;
-
             this.stateMachine.transition('onhit');
+            return;
+        }
+        if(this.stateMachine.collision_arrow){
+            this.stateMachine.transition('onhit_arrow');
             return;
         }
 
@@ -187,16 +216,33 @@ class KickState extends State {
 class OnHitState extends State {
     enter(scene, self){
 
-        if(scene.x_p2b >= 0){
-            // bounce off to left
-            self.on_hit(-1);
-        }else{
-            self.on_hit(1);
-        }
+        self.on_hit(-scene.dir);
 
         scene.time.delayedCall(250, () => {
             this.stateMachine.transition('jump');
             this.stateMachine.collision = false;
+            self.clearTint();
+        });
+    }
+
+    execute(scene, self){
+        const { left, right, up, down, space, shift } = scene.keys;
+    }
+
+}
+
+class OnHitState_Arrow extends State {
+    enter(scene, self){
+
+        self.on_hit_arrow();
+
+        scene.time.delayedCall(100, () => {
+            if(self.body.onFloor()){
+                this.stateMachine.transition('idle');
+            }else{
+                this.stateMachine.transition('jump');
+            }
+            this.stateMachine.collision_arrow = false;
             self.clearTint();
         });
     }
