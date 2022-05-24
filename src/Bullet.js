@@ -43,7 +43,6 @@ class Arrow extends Phaser.Physics.Arcade.Sprite
 
         this.setVelocityX(dirX / sqrtXY * 800);
         this.setVelocityY(dirY / sqrtXY * 800);
-
         this.setAccelerationY(500);
     }
 

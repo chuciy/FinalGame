@@ -15,7 +15,7 @@ class Scene_1 extends Phaser.Scene {
 
     create() {
         //UI
-        this.cameras.main.setBackgroundColor('#FACADE');
+        this.cameras.main.setBackgroundColor('#101010');
 
         //collision info
         this.x_p2b = 500;       // x distance from player to boss: boss.x - player.x
@@ -26,6 +26,8 @@ class Scene_1 extends Phaser.Scene {
         this.bossFSM = new StateMachine("idle_boss", {
             idle_boss: new IdleState_Boss(),
             onhit_boss : new OnHitState_Boss(),
+            AI_P1 : new AI_P1(),
+            P1_sub_1 : new P1_sub_1()
 
 
         }, [this, this.boss]);

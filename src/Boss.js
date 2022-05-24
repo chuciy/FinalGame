@@ -6,11 +6,11 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 
         // set properties
-        this.shoot_cd = 1000;
+        this.shoot_cd = 1000; //ms
         this.can_shoot = true;
-
-
         this.projectiles = new Arrows(scene);
+
+
 
         // set physics properties
         this.setGravityY(2000);
@@ -18,6 +18,9 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         this.setImmovable();
 
 
+        //states
+        this.states = ['AI_P1', 'AI_P2'];
+        this.in_behavior = false;
     }
 
     on_hit(direction){
@@ -30,6 +33,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 class IdleState_Boss extends State {
     enter(scene, self){
         self.body.setVelocity(0);
+        self.clearTint();
        
     }
 
@@ -42,18 +46,93 @@ class IdleState_Boss extends State {
         }
 
         //
+        if(!self.in_behavior){
+            self.in_behavior = true;
+            scene.time.delayedCall(2000, () => {
+                self.in_behavior = false;
+            });
+
+            let rdm = Math.random();
+            if(rdm >= 0.3){
+                this.stateMachine.transition('AI_P1');
+            }else{
+                self.setVelocityX((Math.random() - 0.5) * 700);
+            }
+        }
+        //
+        
+    }
+
+}
+
+class AI_P1 extends State {
+    enter(scene, self){
+        console.log("Ai_p1");
+        self.setTint(0x00FFFF);
+
+    }
+
+    execute(scene, self){
+        if(this.stateMachine.collision){
+            this.stateMachine.transition('onhit_boss');
+            return;
+        }
+
+        let dx = Math.abs(scene.x_p2b);
+        let dir = scene.x_p2b > 0 ? 1 : -1;
+
+        if(dx <= 500){
+            self.setVelocityX((1 - dx/500) * dir * 500);
+        }else{
+            self.setVelocityX(-dir * 500);
+        }
+
+
         if(self.can_shoot){
             self.projectiles.fire_arrow(scene.bx, scene.by, scene.px, scene.py);
             self.can_shoot = false;
             scene.time.delayedCall(self.shoot_cd, () => {
-                self.projectiles.fire_arrow(scene.bx, scene.by, scene.px, scene.py);
                 self.can_shoot = true;
             });
+        }
+
+        //
+        if(!self.in_behavior){
+            self.in_behavior = true;
+            scene.time.delayedCall(2000, () => {
+                self.in_behavior = false;
+            });
+
+            let rdm = Math.random();
+            if(rdm >= 0.9){
+                this.stateMachine.transition('idle_boss');
+            }else{
+                this.stateMachine.transition('P1_sub_1');
+            }
         }
     }
 
 }
 
+class P1_sub_1 extends State {
+    enter(scene, self){
+        console.log("s1");
+        self.setVelocityY(-750);
+        self.setTint(0x66FF22);
+        scene.time.delayedCall(1000, () => {
+            this.stateMachine.transition('AI_P1');
+        });
+    }
+
+    execute(scene, self){
+         //collision
+         if(this.stateMachine.collision){
+            this.stateMachine.transition('onhit_boss');
+            return;
+        }
+
+    }
+}
 class OnHitState_Boss extends State {
     enter(scene, self){
 

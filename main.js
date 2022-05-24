@@ -6,7 +6,7 @@ const HEIGHT = 675;
 let game = new Phaser.Game({
     width: WIDTH,
     height: HEIGHT,
-    //zoom: 1,
+    zoom: 0.5,
     scene: [Scene_1],
     physics: {
         default: 'arcade',
@@ -16,3 +16,4 @@ let game = new Phaser.Game({
     }
 });
 
+//game.world.setBounds(0, 0, 2400, 675);
