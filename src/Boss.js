@@ -6,7 +6,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 
         // set properties
-        this.shoot_cd = 1000; //ms
+        this.shoot_cd = 600; //ms
         this.can_shoot = true;
         this.projectiles = new Arrows(scene);
 
@@ -110,7 +110,7 @@ class AI_P1 extends State {
         //Random decision
         if(!self.in_behavior){
             self.in_behavior = true;
-            scene.time.delayedCall(3000, () => {
+            scene.time.delayedCall(4000, () => {
                 self.in_behavior = false;
             });
 

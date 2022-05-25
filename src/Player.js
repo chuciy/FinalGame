@@ -8,6 +8,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // set properties
         this.speed = 200;
         this.jumps = 2;
+        this.success_block = false;
         // set physics properties
         this.setGravityY(2000);
         this.body.setCollideWorldBounds(true);
@@ -268,17 +269,33 @@ class BlockState extends State {
         self.setTint(0x10c688);
 
         scene.time.delayedCall(500, () => {
+            self.setGravityY(2000);
+            self.clearTint();
+            this.stateMachine.collision = false;
+            this.stateMachine.collision_arrow = false;
+            self.success_block = false;
+
             if(self.body.onFloor()){
                 this.stateMachine.transition('idle');
             }else{
                 this.stateMachine.transition('jump');
             }
-            self.setGravityY(2000);
-            self.clearTint();
+            
         });
     }
 
     execute(scene, self){
+
+        if(this.stateMachine.collision && !self.success_block){
+            self.setTint(0x00FF00);
+            return;
+        }
+        if(this.stateMachine.collision_arrow && !self.success_block){
+            self.setTint(0x00FFFF);
+            return;
+        }
+
+
 
     }
 
