@@ -6,6 +6,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 
         // set properties
+        this.hp = 1000;
         this.speed = 200;
         this.jumps = 2;
         this.success_block = false;
@@ -14,6 +15,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setCollideWorldBounds(true);
         this.setImmovable();
 
+        //state related
+        this.GENERAL_STATES = {
+            free: 'free',
+            kick: 'kick',
+            other: "other"
+        }
+        this.general_state = this.GENERAL_STATES.free;
 
     }
     
@@ -29,12 +37,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     on_hit(direction){
         //this.scene.sound.play("se0");
+        if(this.general_state != this.GENERAL_STATES.kick){
+            this.hp -= 100;
+        }
+        
         this.setGravityY(2000);
         this.body.setVelocityX(500 * direction);
         this.body.setVelocityY(-1100);
         this.setTint(0x303030);
     }
     on_hit_arrow(){
+        this.hp -= 50;
         this.setGravityY(2000);
         this.body.setVelocity(-this.scene.dir * 100, 0),
         this.setTint(0xEEDD22);
@@ -52,6 +65,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 class IdleState extends State {
     enter(scene, self){
         self.body.setVelocity(0);
+        self.general_state = self.GENERAL_STATES.free;
     }
 
     execute(scene, self){
@@ -85,6 +99,9 @@ class IdleState extends State {
 }
 
 class MoveState extends State {
+    enter(scene, self){
+        self.general_state = self.GENERAL_STATES.free;
+    }
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
 
@@ -124,6 +141,7 @@ class MoveState extends State {
 
 class JumpState extends State {
     enter(scene, self){
+        self.general_state = self.GENERAL_STATES.free;
     }
 
     execute(scene, self){
@@ -184,6 +202,8 @@ class JumpState extends State {
 //Kick state changes gravity and it need to be set back to 2000 when entering other state
 class KickState extends State {
     enter(scene, self){
+        self.general_state = self.GENERAL_STATES.kick;
+
         let direction = self.body.velocity.x;
 
         self.body.setVelocityY(800);
@@ -264,6 +284,8 @@ class OnHitState_Arrow extends State {
 // changes gravity
 class BlockState extends State {
     enter(scene, self){
+        self.general_state = self.GENERAL_STATES.other;
+
         self.setVelocity(0.5 * self.body.velocity.x, 0.07 * self.body.velocity.y);
         self.setGravityY(0);
         self.setTint(0x10c688);
@@ -287,11 +309,16 @@ class BlockState extends State {
     execute(scene, self){
 
         if(this.stateMachine.collision && !self.success_block){
+            self.success_block = true;
             self.setTint(0x00FF00);
+            self.setVelocityX(-scene.dir * 800);
             return;
         }
         if(this.stateMachine.collision_arrow && !self.success_block){
+            self.success_block = true;
+            scene.on_reflect();
             self.setTint(0x00FFFF);
+            
             return;
         }
 

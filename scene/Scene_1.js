@@ -16,6 +16,8 @@ class Scene_1 extends Phaser.Scene {
     create() {
         //UI
         this.cameras.main.setBackgroundColor('#DDDDDD');
+        this.p_health_bar = this.makeBar(10,20,0x2ecc71)
+        this.b_health_bar = this.makeBar(680,20,0xcc2121)
 
         //collision info
         this.x_p2b = 500;       // x distance from player to boss: boss.x - player.x
@@ -60,6 +62,10 @@ class Scene_1 extends Phaser.Scene {
     }
 
     update(){
+        if(this.boss.hp <= 0 || this.player.hp <= 0){
+            this.scene.start("victory");    
+        }
+
         this.x_p2b = this.boss.body.x - this.player.body.x;
         this.bx = this.boss.body.x;     this.by = this.boss.body.y;
         this.px = this.player.body.x;   this.py = this.player.body.y;
@@ -72,6 +78,11 @@ class Scene_1 extends Phaser.Scene {
         //update FSM
         this.playerFSM.step();
         this.bossFSM.step();
+
+
+        //Ui
+        this.b_health_bar.scaleX = Math.max(this.boss.hp, 0) / 1000;
+        this.p_health_bar.scaleX = Math.max(this.player.hp, 0) / 1000;
     }
 
     on_collision_pb(){
@@ -86,6 +97,28 @@ class Scene_1 extends Phaser.Scene {
         arrow.setVisible(false);
         arrow.x = -50; arrow.y = -50;
     }
+    on_reflect(){
+        console.log("arrow reflected");
+    }
 
+
+
+    makeBar(x, y,color) {
+        //draw the bar
+        let bar = this.add.graphics();
+
+        //color the bar
+        bar.fillStyle(color, 1);
+
+        //fill the bar with a rectangle
+        bar.fillRect(0, 0, 500, 25);
+        
+        //position the bar
+        bar.x = x;
+        bar.y = y;
+
+        //return the bar
+        return bar;
+    }
 
 }

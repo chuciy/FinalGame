@@ -6,6 +6,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 
         // set properties
+        this.hp = 1000;
         this.shoot_cd = 600; //ms
         this.can_shoot = true;
         this.projectiles = new Arrows(scene);
@@ -30,6 +31,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
     }
 
     on_hit(direction){
+        this.hp -= 100;
         this.setGravityY(2000);
         this.body.setVelocityX(200 * direction);
         this.setTint(0xFF1010);

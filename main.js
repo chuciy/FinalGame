@@ -7,7 +7,7 @@ let game = new Phaser.Game({
     width: WIDTH,
     height: HEIGHT,
     zoom: 0.5,
-    scene: [Scene_1],
+    scene: [Start, Scene_1, Victory],
     physics: {
         default: 'arcade',
         arcade: {
