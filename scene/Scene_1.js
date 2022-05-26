@@ -4,8 +4,8 @@ class Scene_1 extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('player', 'assets/player.png');
-        this.load.image('boss', 'assets/boss.png');
+        //this.load.image('player', 'assets/player.png');
+        //this.load.image('boss', 'assets/boss.png');
 
         this.load.image('arrow', 'assets/arrow.png');
 
@@ -14,6 +14,7 @@ class Scene_1 extends Phaser.Scene {
     }
 
     create() {
+        this.physics.world.setFPS(60);
         //UI
         this.cameras.main.setBackgroundColor('#DDDDDD');
         this.p_health_bar = this.makeBar(10,20,0x2ecc71)
@@ -23,8 +24,11 @@ class Scene_1 extends Phaser.Scene {
         this.x_p2b = 500;       // x distance from player to boss: boss.x - player.x
         this.px, this.py, this.bx, this.by;
 
+        //create_animation()
+        this.create_animation();
+
         //enemy
-        this.boss = new Boss(this, 700, 700, 'boss', 0);
+        this.boss = new Boss(this, 700, 700, 'boss_idle', 0);
         this.bossFSM = new StateMachine("idle_boss", {
             idle_boss: new IdleState_Boss(),
             onhit_boss : new OnHitState_Boss(),
@@ -36,7 +40,7 @@ class Scene_1 extends Phaser.Scene {
         }, [this, this.boss]);
 
         //player
-        this.player = new Player(this, 200, 700, 'player', 0);
+        this.player = new Player(this, 200, 700, 'player_idle', 0);
         this.playerFSM = new StateMachine("idle", {
             idle: new IdleState(),
             move: new MoveState(),
@@ -57,7 +61,7 @@ class Scene_1 extends Phaser.Scene {
         this.keys.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-        document.getElementById('info').innerHTML = '<strong>Operation:</strong> Arrows move, SPACE jump, [A] kick, [D] block\n';
+        //document.getElementById('info').innerHTML = '<strong>Operation:</strong> Arrows move, SPACE jump, [A] kick, [D] block\n';
 
     }
 
@@ -70,6 +74,13 @@ class Scene_1 extends Phaser.Scene {
         this.bx = this.boss.body.x;     this.by = this.boss.body.y;
         this.px = this.player.body.x;   this.py = this.player.body.y;
         this.dir = this.x_p2b >= 0 ? 1 : -1;
+        if(this.dir == -1){
+            this.boss.flipX = true;
+            this.player.flipX = true;
+        }else{
+            this.boss.flipX = false;
+            this.player.flipX = false;
+        }
 
         //collision
         this.physics.world.collide(this.player, this.boss, this.on_collision_pb, null, this);
@@ -121,4 +132,41 @@ class Scene_1 extends Phaser.Scene {
         return bar;
     }
 
+    create_animation() {
+        this.anims.create({
+            key: 'boss_idle',
+            frames: 'boss_idle',
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'boss_walk',
+            frames: 'boss_walk',
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'arrow',
+            frames: 'arrow',
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'player_idle',
+            frames: 'player_idle',
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'player_running',
+            frames: 'player_running',
+            frameRate: 10,
+            repeat: -1
+        });
+    
+    
+    }
+
 }
+
+

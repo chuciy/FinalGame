@@ -40,6 +40,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 class IdleState_Boss extends State {
     enter(scene, self){
+        self.anims.play("boss_idle", true);
         console.log("in_idle");
         this.basic_state = self.BASIC_STATES.idle;
         self.clearTint();
@@ -68,6 +69,7 @@ class IdleState_Boss extends State {
                 this.stateMachine.transition('AI_P2');
             }else{
                 console.log("idle_move");
+                self.anims.play("boss_walk", true);
                 self.setVelocityX((Math.random() - 0.5) * 700);
             }
         }
@@ -80,6 +82,7 @@ class IdleState_Boss extends State {
 class AI_P1 extends State {
     enter(scene, self){
         this.basic_state = self.BASIC_STATES.AI_P1;
+        self.anims.play("boss_walk", true);
         console.log("Enter Basic_state: " + this.basic_state);
         self.setTint(0x00FFFF);
 
@@ -96,9 +99,9 @@ class AI_P1 extends State {
         //try to keep certain distance with player
         let dx = Math.abs(scene.x_p2b);
         if(dx <= 500){
-            self.setVelocityX((1 - dx/500) * scene.dir * 500);
+            self.setVelocityX((1 - dx/500) * scene.dir * 500 + 20);
         }else{
-            self.setVelocityX(-scene.dir * (dx - 300) * 0.8);
+            self.setVelocityX(-scene.dir * (dx - 300) * 0.8 + 20);
         }
         //Shoot arrows in parabola
         if(self.can_shoot){
@@ -171,6 +174,7 @@ class OnHitState_Boss extends State {
 
 class AI_P2 extends State {
     enter(scene, self){
+        self.anims.play("boss_walk", true);
         this.basic_state = self.BASIC_STATES.AI_P2;
         console.log("Enter Basic_state: " + this.basic_state);
         self.setTint(0xEF12FE);

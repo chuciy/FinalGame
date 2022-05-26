@@ -27,6 +27,7 @@ class Arrow extends Phaser.Physics.Arcade.Sprite
     constructor (scene, x, y)
     {
         super(scene, x, y, 'arrow');
+        this.anims.play('arrow');
     }
 
     fire (bx, by, px, py)

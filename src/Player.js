@@ -32,7 +32,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     jump_cancel_refresh(){
-
+        console.log("you just triggered what is called jc");
     }
 
     on_hit(direction){
@@ -64,6 +64,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 class IdleState extends State {
     enter(scene, self){
+        self.anims.play("player_idle");
         self.body.setVelocity(0);
         self.general_state = self.GENERAL_STATES.free;
     }
@@ -100,6 +101,7 @@ class IdleState extends State {
 
 class MoveState extends State {
     enter(scene, self){
+        self.anims.play("player_running");
         self.general_state = self.GENERAL_STATES.free;
     }
     execute(scene, self){
@@ -141,6 +143,7 @@ class MoveState extends State {
 
 class JumpState extends State {
     enter(scene, self){
+        self.anims.play("player_running");
         self.general_state = self.GENERAL_STATES.free;
     }
 
