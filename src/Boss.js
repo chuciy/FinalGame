@@ -72,6 +72,8 @@ class IdleState_Boss extends State {
                 self.anims.play("boss_walk", true);
                 self.setVelocityX((Math.random() - 0.5) * 700);
             }
+        }else{
+            self.body.velocityX *= 0.5; // ???not working??
         }
         //
         

@@ -318,6 +318,7 @@ class BlockState extends State {
             return;
         }
         if(this.stateMachine.collision_arrow && !self.success_block){
+            self.anims.play("block_success");
             self.success_block = true;
             scene.on_reflect();
             self.setTint(0x00FFFF);

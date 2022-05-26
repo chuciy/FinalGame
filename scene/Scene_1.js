@@ -29,6 +29,7 @@ class Scene_1 extends Phaser.Scene {
 
         //enemy
         this.boss = new Boss(this, 700, 700, 'boss_idle', 0);
+        this.boss.setScale(1.75);
         this.bossFSM = new StateMachine("idle_boss", {
             idle_boss: new IdleState_Boss(),
             onhit_boss : new OnHitState_Boss(),
@@ -41,6 +42,7 @@ class Scene_1 extends Phaser.Scene {
 
         //player
         this.player = new Player(this, 200, 700, 'player_idle', 0);
+        this.player.setScale(1.25);
         this.playerFSM = new StateMachine("idle", {
             idle: new IdleState(),
             move: new MoveState(),
@@ -74,10 +76,10 @@ class Scene_1 extends Phaser.Scene {
         this.bx = this.boss.body.x;     this.by = this.boss.body.y;
         this.px = this.player.body.x;   this.py = this.player.body.y;
         this.dir = this.x_p2b >= 0 ? 1 : -1;
-        if(this.dir == -1){
+        if(this.dir == -1 && this.x_p2b <= -50){
             this.boss.flipX = true;
             this.player.flipX = true;
-        }else{
+        }else if(this.dir == 1 && this.x_p2b >= 50){
             this.boss.flipX = false;
             this.player.flipX = false;
         }
@@ -162,6 +164,12 @@ class Scene_1 extends Phaser.Scene {
             frames: 'player_running',
             frameRate: 10,
             repeat: -1
+        });
+        this.anims.create({
+            key: 'block_success',
+            frames: 'block_success',
+            frameRate: 20,
+            repeat: 0
         });
     
     
