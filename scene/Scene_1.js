@@ -30,12 +30,13 @@ class Scene_1 extends Phaser.Scene {
         //enemy
         this.boss = new Boss(this, 700, 700, 'boss_idle', 0);
         this.boss.setScale(1.75);
-        this.bossFSM = new StateMachine("idle_boss", {
+        this.bossFSM = new StateMachine("intro_boss", {
             idle_boss: new IdleState_Boss(),
             onhit_boss : new OnHitState_Boss(),
             AI_P1 : new AI_P1(),
             AI_P2 : new AI_P2(),
-            P1_sub_1 : new P1_sub_1()
+            P1_sub_1 : new P1_sub_1(),
+            intro_boss: new Intro_Boss
 
 
         }, [this, this.boss]);
@@ -43,14 +44,15 @@ class Scene_1 extends Phaser.Scene {
         //player
         this.player = new Player(this, 200, 700, 'player_idle', 0);
         this.player.setScale(1.25);
-        this.playerFSM = new StateMachine("idle", {
+        this.playerFSM = new StateMachine("intro", {
             idle: new IdleState(),
             move: new MoveState(),
             jump: new JumpState(),
             kick: new KickState(),
             onhit: new OnHitState(),
             onhit_arrow: new OnHitState_Arrow(),
-            block: new BlockState()
+            block: new BlockState(),
+            intro: new Intro()
 
 
         }, [this, this.player]);

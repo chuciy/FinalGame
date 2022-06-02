@@ -215,3 +215,23 @@ class AI_P2 extends State {
     }
 
 }
+
+class Intro_Boss extends State {
+    enter(scene, self){
+        console.log("in");
+        self.x = 1200;
+        self.y = 0;
+        self.setVelocityX(-200);
+        self.setTint(0x101010);
+
+        scene.time.delayedCall(1000, () => {
+            self.clearTint();
+            this.stateMachine.transition('idle_boss');
+        });
+    }
+    
+    execute(scene, self){
+
+    }
+
+}

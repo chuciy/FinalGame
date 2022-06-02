@@ -331,3 +331,26 @@ class BlockState extends State {
     }
 
 }
+
+class Intro extends State {
+    enter(scene, self){
+        self.x = 50;
+        self.y = 150;
+        self.setVelocityX(200);
+        self.setTint(0x101010);
+
+        scene.time.delayedCall(1000, () => {
+            self.clearTint();
+            if(self.body.onFloor()){
+                this.stateMachine.transition('idle');
+            }else{
+                this.stateMachine.transition('jump');
+            }
+        });
+    }
+    
+    execute(scene, self){
+
+    }
+
+}
