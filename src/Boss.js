@@ -89,6 +89,11 @@ class AI_P1 extends State {
         console.log("Enter Basic_state: " + this.basic_state);
         self.setTint(0x00FFFF);
 
+        self.in_behavior = true;
+        scene.time.delayedCall(2500, () => {
+            self.in_behavior = false;
+        });
+
     }
 
     execute(scene, self){
@@ -123,7 +128,7 @@ class AI_P1 extends State {
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.7){
+            if(rdm >= 0.5){
                 this.stateMachine.transition('idle_boss');
             }else{
                 this.stateMachine.transition('P1_sub_1');
@@ -145,8 +150,10 @@ class P1_sub_1 extends State {
 
         self.setGravityY(0);
 
-        scene.time.delayedCall(500, () => {
-            self.setVelocity(0, 0);
+        self.can_shoot = false;
+        scene.time.delayedCall(1250, () => {
+            self.can_shoot = true;
+            self.setVelocity(100 * scene.dir, 0);
 
         });
 
@@ -157,7 +164,7 @@ class P1_sub_1 extends State {
                 self.in_behavior = false;
             });
             self.setGravityY(2000);
-            this.stateMachine.transition('AI_P1');
+            this.stateMachine.transition('idle_boss');
         });
     }
 
@@ -169,9 +176,15 @@ class P1_sub_1 extends State {
         }
 
         if(self.can_shoot){
-            self.orbs.fire_arrow(scene.bx, scene.by, scene.px, scene.py);
+            let rx = 1200 - scene.px; let ry = 675 - scene.px;
+            const NUM = 4;
+            for(let i = 0; i != NUM; i++){
+                self.orbs.fire_arrow(scene.bx, scene.by, scene.px / NUM * i, scene.py / NUM * i);
+                self.orbs.fire_arrow(scene.bx, scene.by, scene.px + (rx / NUM * i), scene.py + (ry / NUM * i));
+            }
+
             self.can_shoot = false;
-            scene.time.delayedCall(self.shoot_cd, () => {
+            scene.time.delayedCall(self.shoot_cd * 1.8, () => {
                 self.can_shoot = true;
             });
         }

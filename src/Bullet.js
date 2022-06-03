@@ -33,6 +33,8 @@ class Arrow extends Phaser.Physics.Arcade.Sprite
     fire (bx, by, px, py)
     {
 
+        this.setScale(2);
+        
         let dirX = px - bx;
         let dirY = py - by - 400 * (Math.abs(bx - px) / WIDTH) - (Math.random() - 0.5) * 150; //
         let sqrtXY = Math.sqrt(dirX * dirX + dirY * dirY);
@@ -42,8 +44,8 @@ class Arrow extends Phaser.Physics.Arcade.Sprite
         this.setActive(true);
         this.setVisible(true);
 
-        this.setVelocityX(dirX / sqrtXY * 800);
-        this.setVelocityY(dirY / sqrtXY * 800);
+        this.setVelocityX(dirX / sqrtXY * 600);
+        this.setVelocityY(dirY / sqrtXY * 600);
         this.setAccelerationY(500);
     }
 
@@ -101,7 +103,7 @@ class Orb extends Phaser.Physics.Arcade.Sprite
     {
 
         let dirX = px - bx;
-        let dirY = py - by - 400 * (Math.abs(bx - px) / WIDTH) - (Math.random() - 0.5) * 150; //
+        let dirY = py - by;
         let sqrtXY = Math.sqrt(dirX * dirX + dirY * dirY);
 
 
@@ -109,9 +111,9 @@ class Orb extends Phaser.Physics.Arcade.Sprite
         this.setActive(true);
         this.setVisible(true);
 
-        this.setVelocityX(dirX / sqrtXY * 800);
-        this.setVelocityY(dirY / sqrtXY * 800);
-        this.setAccelerationY(500);
+        this.setVelocityX(dirX / sqrtXY * 700);
+        this.setVelocityY(dirY / sqrtXY * 700);
+        this.setAccelerationY(0);
     }
 
     preUpdate (time, delta)
