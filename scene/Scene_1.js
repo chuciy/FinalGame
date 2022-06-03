@@ -45,7 +45,7 @@ class Scene_1 extends Phaser.Scene {
 
         //player
         this.player = new Player(this, 200, 700, 'player_idle', 0);
-        this.player.setScale(1.25);
+        this.player.setScale(2);
         this.playerFSM = new StateMachine("intro", {
             idle: new IdleState(),
             move: new MoveState(),
