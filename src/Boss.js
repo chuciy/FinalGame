@@ -30,7 +30,16 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             AI_P1: 'AI_P1',
             AI_P2: "AI_P2"
         }
+        
 
+        // Decision CD for each main state
+        this.SCD = {
+            idle: false,
+            p1: false,
+            p2: false,
+            p3: false
+        }
+        //
         this.COLORS = {
             white: 0xFFFFFF,
             grey: 0x808080,
@@ -78,16 +87,16 @@ class IdleState_Boss extends State {
         }
 
         //
-        if(!self.in_behavior){
-            self.in_behavior = true;
+        if(!self.SCD.idle){
+            self.SCD.idle = true;
             scene.time.delayedCall(800, () => {
-                self.in_behavior = false;
+                self.SCD.idle = false;
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.33){
+            if(rdm >= 0.6){
                 this.stateMachine.transition('AI_P1');
-            }else if(rdm >= 0.11){
+            }else if(rdm >= 0.2){
                 this.stateMachine.transition('AI_P2');
             }else{
                 console.log("idle_move");
@@ -110,9 +119,10 @@ class AI_P1 extends State {
         console.log("Enter Basic_state: " + this.basic_state);
         self.setTint(self.COLORS.cyan);
 
-        self.in_behavior = true;
+        //upon entering any main state, be assured to stay for at least several seconds
+        self.SCD.p1 = true;
         scene.time.delayedCall(2500, () => {
-            self.in_behavior = false;
+            self.SCD.p1 = false;
         });
 
     }
@@ -142,17 +152,21 @@ class AI_P1 extends State {
         }
 
         //Random decision
-        if(!self.in_behavior){
-            self.in_behavior = true;
+        if(!self.SCD.p1){
+            self.SCD.p1 = true;
             scene.time.delayedCall(4000, () => {
-                self.in_behavior = false;
+                self.SCD.p1 = false;
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.5){
+            if(rdm >= 0.8){
                 this.stateMachine.transition('idle_boss');
-            }else{
+            }else if(rdm >= 0.5){
                 this.stateMachine.transition('P1_sub_1');
+            }else if(rdm >= 0.2){
+                this.stateMachine.transition('AI_P2');
+            }else{
+                //remain in current
             }
         }
     }
@@ -179,11 +193,7 @@ class P1_sub_1 extends State {
         });
 
 
-        scene.time.delayedCall(4000, () => {
-            self.in_behavior = true;
-            scene.time.delayedCall(4000, () => {
-                self.in_behavior = false;
-            });
+        scene.time.delayedCall(4500, () => {
             self.setGravityY(2000);
             this.stateMachine.transition('idle_boss');
         });
@@ -247,6 +257,13 @@ class AI_P2 extends State {
         console.log("Enter Basic_state: " + this.basic_state);
         self.setTint(self.COLORS.magenta);
 
+        //upon entering any main state, be assured to stay for at least several seconds
+        self.SCD.p2 = true;
+        scene.time.delayedCall(2500, () => {
+            self.SCD.p2 = false;
+        });
+
+
     }
 
     execute(scene, self){
@@ -259,23 +276,23 @@ class AI_P2 extends State {
         //Default behavior always activated in P2 state:
         //try to approch player
         let dx = Math.max(Math.abs(scene.x_p2b) , 400) / 400;
-        self.setVelocityX(-scene.dir * dx * dx * 350);
+        self.setVelocityX(-scene.dir * dx * dx * 300);
 
 
         //Random decision
-        if(!self.in_behavior){
-            self.in_behavior = true;
+        if(!self.SCD.p2){
+            self.SCD.p2 = true;
             scene.time.delayedCall(2000, () => {
-                self.in_behavior = false;
+                self.SCD.p2 = false;
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.66){
+            if(rdm >= 0.60){
                 this.stateMachine.transition('AI_P1');
+            }else if(rdm >= 0.3){
+                this.stateMachine.transition('idle');
             }else{
-                //test
-                console.log("p2_sub1");
-                self.setVelocity((Math.random() - 0.5) * 200, -500);
+                this.stateMachine.transition('P1_sub_1');
             }
         }
     }

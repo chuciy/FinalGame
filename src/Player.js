@@ -200,7 +200,7 @@ class JumpState extends State {
         }
 
         //falling animation
-        if(!self.falling && self.body.velocity.y > 0){
+        if(!self.falling && self.body.velocity.y >= 0){
             self.falling = true;
             self.anims.play("player_falling");
         }
@@ -339,10 +339,11 @@ class BlockState extends State {
         self.general_state = self.GENERAL_STATES.other;
 
         self.setVelocity(0.5 * self.body.velocity.x, 0.07 * self.body.velocity.y);
-        self.setGravityY(0);
+        self.setGravityY(1);
         self.setTint(self.COLORS.red);
+        self.anims.play("player_block");
 
-        scene.time.delayedCall(500, () => {
+        scene.time.delayedCall(750, () => {
             self.setGravityY(2000);
             self.setTint(self.COLORS.grey);
             this.stateMachine.collision = false;

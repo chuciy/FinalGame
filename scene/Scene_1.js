@@ -212,6 +212,13 @@ class Scene_1 extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'player_block',
+            frames: 'player_block',
+            frameRate: 20,
+            repeat: 5
+        });
+
+        this.anims.create({
             key: 'player_falling',
             frames: 'player_falling',
             frameRate: 30,
