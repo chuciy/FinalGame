@@ -30,7 +30,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             grey: 0x808080,
             red: 0xF04040,
             green: 0x40F040,
-            blue: 0x4040F0,
+            blue: 0x8080E0,
             dark: 0x101010
         }
     }
@@ -50,8 +50,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //this.scene.sound.play("se0");
         if(this.scene.blue_yellow){
             this.setTint(this.COLORS.white);
+            this.scene.cameras.main.shake(300, 0.03);
         }else if(this.scene.green_purple){
             this.setTint(this.COLORS.white);
+            this.scene.cameras.main.shake(300, 0.03);
         }else{
             this.hp -= 50;
             this.setTint(this.COLORS.dark);

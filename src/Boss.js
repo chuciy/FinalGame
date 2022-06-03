@@ -6,7 +6,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 
         // set properties
-        this.hp = 1000;
+        this.hp = 1500;
         this.shoot_cd = 600; //ms
         this.can_shoot = true;
 
@@ -66,7 +66,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             this.body.setVelocity(1000 * direction, -200);
             this.setTint(this.COLORS.white);
         }else{
-            this.hp -= 100;
+            this.hp -= 10;
             this.setGravityY(2000);
             this.body.setVelocityX(200 * direction);
             this.setTint(this.COLORS.dark);
