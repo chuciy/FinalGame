@@ -91,6 +91,7 @@ class Scene_1 extends Phaser.Scene {
         //collision
         this.physics.world.collide(this.player, this.boss, this.on_collision_pb, null, this);
         this.physics.world.collide(this.player, this.boss.projectiles, this.on_arrow_hit_player, null, this);
+        this.physics.world.collide(this.player, this.boss.orbs, this.on_orb_hit_player, null, this);
 
         //update FSM
         this.playerFSM.step();
@@ -113,6 +114,13 @@ class Scene_1 extends Phaser.Scene {
         arrow.setActive(false);
         arrow.setVisible(false);
         arrow.x = -50; arrow.y = -50;
+    }
+
+    on_orb_hit_player(player, orb){
+        this.playerFSM.collision_orb = true;
+        orb.setActive(false);
+        orb.setVisible(false);
+        orb.x = -50; orb.y = -50;
     }
     on_reflect(){
         console.log("arrow reflected");
@@ -154,6 +162,12 @@ class Scene_1 extends Phaser.Scene {
         this.anims.create({
             key: 'arrow',
             frames: 'arrow',
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'orb',
+            frames: 'orb',
             frameRate: 10,
             repeat: -1
         });
