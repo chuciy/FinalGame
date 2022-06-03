@@ -10,6 +10,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         this.shoot_cd = 600; //ms
         this.can_shoot = true;
         this.projectiles = new Arrows(scene);
+        this.orbs = new Orbs(scene);
 
 
 
@@ -141,7 +142,21 @@ class P1_sub_1 extends State {
         self.anims.play("boss_jump");
         self.setVelocity(300 * scene.dir, -1200);
         self.setTint(0xAAAA33);
-        scene.time.delayedCall(1000, () => {
+
+        self.setGravityY(0);
+
+        scene.time.delayedCall(500, () => {
+            self.setVelocity(0, 0);
+
+        });
+
+
+        scene.time.delayedCall(4000, () => {
+            self.in_behavior = true;
+            scene.time.delayedCall(4000, () => {
+                self.in_behavior = false;
+            });
+            self.setGravityY(2000);
             this.stateMachine.transition('AI_P1');
         });
     }
@@ -151,6 +166,14 @@ class P1_sub_1 extends State {
          if(this.stateMachine.collision){
             this.stateMachine.transition('onhit_boss');
             return;
+        }
+
+        if(self.can_shoot){
+            self.orbs.fire_arrow(scene.bx, scene.by, scene.px, scene.py);
+            self.can_shoot = false;
+            scene.time.delayedCall(self.shoot_cd, () => {
+                self.can_shoot = true;
+            });
         }
 
     }

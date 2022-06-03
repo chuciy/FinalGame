@@ -55,6 +55,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setTint(0xEEDD22);
     }
 
+    on_hit_orb(){
+        /*
+        this.hp -= 30;
+        this.setGravityY(2000);
+        this.body.setVelocity(-this.scene.dir * 50, 0),
+        this.setTint(0xDEDE22);
+        */
+    }
+
 
     jump(){
         this.jumps--;
@@ -80,7 +89,7 @@ class IdleState extends State {
             this.stateMachine.transition('onhit');
             return;
         }
-        if(this.stateMachine.collision_arrow){
+        if(this.stateMachine.collision_arrow || this.stateMachine.collision_orb){
             this.stateMachine.transition('onhit_arrow');
             return;
         }
@@ -115,7 +124,7 @@ class MoveState extends State {
             this.stateMachine.transition('onhit');
             return;
         }
-        if(this.stateMachine.collision_arrow){
+        if(this.stateMachine.collision_arrow || this.stateMachine.collision_orb){
             this.stateMachine.transition('onhit_arrow');
             return;
         }
@@ -159,7 +168,7 @@ class JumpState extends State {
             this.stateMachine.transition('onhit');
             return;
         }
-        if(this.stateMachine.collision_arrow){
+        if(this.stateMachine.collision_arrow || this.stateMachine.collision_orb){
             this.stateMachine.transition('onhit_arrow');
             return;
         }
@@ -235,7 +244,7 @@ class KickState extends State {
             this.stateMachine.transition('onhit');
             return;
         }
-        if(this.stateMachine.collision_arrow){
+        if(this.stateMachine.collision_arrow || this.stateMachine.collision_orb){
             this.stateMachine.transition('onhit_arrow');
             return;
         }
@@ -280,6 +289,7 @@ class OnHitState_Arrow extends State {
                 this.stateMachine.transition('jump');
             }
             this.stateMachine.collision_arrow = false;
+            this.stateMachine.collision_orb = false;
             self.clearTint();
         });
     }
@@ -304,6 +314,7 @@ class BlockState extends State {
             self.clearTint();
             this.stateMachine.collision = false;
             this.stateMachine.collision_arrow = false;
+            this.stateMachine.collision_orb = false;
             self.success_block = false;
 
             if(self.body.onFloor()){
@@ -317,7 +328,7 @@ class BlockState extends State {
 
     execute(scene, self){
 
-        if(this.stateMachine.collision && !self.success_block){
+        if( (this.stateMachine.collision_orb || this.stateMachine.collision) && !self.success_block){
             self.success_block = true;
             self.setTint(0x00FF00);
             self.setVelocityX(-scene.dir * 800);
