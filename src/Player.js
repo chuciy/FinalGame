@@ -10,6 +10,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.speed = 200;
         this.jumps = 2;
         this.success_block = false;
+        this.falling = false;
         // set physics properties
         this.setGravityY(2000);
         this.body.setCollideWorldBounds(true);
@@ -27,6 +28,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     
     on_ground_refresh(){
         this.setGravityY(2000);
+        this.falling = false;
         this.jumps = 2;
         this.clearTint();
     }
@@ -56,6 +58,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     jump(){
         this.jumps--;
+        this.anims.play("player_jump");
         this.body.setVelocityY(-1000);
         this.setTint(0xFF8080);
 
@@ -143,7 +146,6 @@ class MoveState extends State {
 
 class JumpState extends State {
     enter(scene, self){
-        self.anims.play("player_running");
         self.general_state = self.GENERAL_STATES.free;
     }
 
@@ -162,6 +164,11 @@ class JumpState extends State {
             return;
         }
 
+        //falling animation
+        if(!self.falling && self.body.velocity.y > 0){
+            self.falling = true;
+            self.anims.play("player_falling");
+        }
 
 
         // transition to idle on first touching ground
@@ -185,9 +192,8 @@ class JumpState extends State {
 
         // Multiple jump
         if(Phaser.Input.Keyboard.JustDown(space) && self.jumps > 0) {
-            self.jumps--;
-            self.body.setVelocityY(-1000);
-            self.setTint(0xFF0000);
+            self.jump();
+
             return;
         }
 
@@ -348,7 +354,7 @@ class Intro extends State {
             }
         });
     }
-    
+
     execute(scene, self){
 
     }

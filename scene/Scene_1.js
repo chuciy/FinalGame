@@ -17,8 +17,10 @@ class Scene_1 extends Phaser.Scene {
         this.physics.world.setFPS(60);
         //UI
         this.cameras.main.setBackgroundColor('#DDDDDD');
+        this.bg = this.add.image(0, 0, 'bg').setOrigin(0, 0);
         this.p_health_bar = this.makeBar(10,20,0x2ecc71)
         this.b_health_bar = this.makeBar(680,20,0xcc2121)
+
 
         //collision info
         this.x_p2b = 500;       // x distance from player to boss: boss.x - player.x
@@ -173,6 +175,23 @@ class Scene_1 extends Phaser.Scene {
             frameRate: 20,
             repeat: 0
         });
+
+        this.anims.create({
+            key: 'player_jump',
+            frames: 'player_jump',
+            frameRate: 30,
+            repeat: 1
+        });
+
+        this.anims.create({
+            key: 'player_falling',
+            frames: 'player_falling',
+            frameRate: 30,
+            repeat: 1
+        });
+
+
+
     
     
     }
