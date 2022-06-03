@@ -140,7 +140,7 @@ class P1_sub_1 extends State {
         console.log("p1_sub1");
         self.anims.play("boss_jump");
         self.setVelocity(300 * scene.dir, -1200);
-        self.setTint(0xFFFF11);
+        self.setTint(0xAAAA33);
         scene.time.delayedCall(1000, () => {
             this.stateMachine.transition('AI_P1');
         });
