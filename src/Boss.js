@@ -63,7 +63,7 @@ class IdleState_Boss extends State {
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.66){
+            if(rdm >= 0.33){
                 this.stateMachine.transition('AI_P1');
             }else if(rdm >= 0.11){
                 this.stateMachine.transition('AI_P2');
@@ -122,7 +122,7 @@ class AI_P1 extends State {
             });
 
             let rdm = Math.random();
-            if(rdm >= 0.4){
+            if(rdm >= 0.7){
                 this.stateMachine.transition('idle_boss');
             }else{
                 this.stateMachine.transition('P1_sub_1');
@@ -132,11 +132,15 @@ class AI_P1 extends State {
 
 }
 
+
+// This becomes the 3rd main state!
+// just too lazy to fix the naming
 class P1_sub_1 extends State {
     enter(scene, self){
         console.log("p1_sub1");
+        self.anims.play("boss_jump");
         self.setVelocity(300 * scene.dir, -1200);
-        self.setTint(0x66FF22);
+        self.setTint(0xFFFF11);
         scene.time.delayedCall(1000, () => {
             this.stateMachine.transition('AI_P1');
         });

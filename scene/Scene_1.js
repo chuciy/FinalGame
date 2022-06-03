@@ -180,14 +180,21 @@ class Scene_1 extends Phaser.Scene {
             key: 'player_jump',
             frames: 'player_jump',
             frameRate: 30,
-            repeat: 1
+            repeat: -1
         });
 
         this.anims.create({
             key: 'player_falling',
             frames: 'player_falling',
             frameRate: 30,
-            repeat: 1
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'boss_jump',
+            frames: 'boss_jump',
+            frameRate: 10,
+            repeat: -1
         });
 
 
