@@ -169,10 +169,15 @@ class P1_sub_1 extends State {
     }
 
     execute(scene, self){
-         //collision
-         if(this.stateMachine.collision){
+        //collision
+        if(this.stateMachine.collision){
             this.stateMachine.transition('onhit_boss');
             return;
+        }
+
+        if(self.y <= 200){
+            self.setVelocityY(0);
+            self.y = 200;
         }
 
         if(self.can_shoot){

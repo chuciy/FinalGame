@@ -34,7 +34,10 @@ class Arrow extends Phaser.Physics.Arcade.Sprite
     {
 
         this.setScale(2);
-        
+        if(bx - px <= 0){
+            this.flipX = true;
+        }
+
         let dirX = px - bx;
         let dirY = py - by - 400 * (Math.abs(bx - px) / WIDTH) - (Math.random() - 0.5) * 150; //
         let sqrtXY = Math.sqrt(dirX * dirX + dirY * dirY);
@@ -102,6 +105,10 @@ class Orb extends Phaser.Physics.Arcade.Sprite
     fire (bx, by, px, py)
     {
 
+        if(bx - px <= 0){
+            this.flipX = true;
+        }
+        
         let dirX = px - bx;
         let dirY = py - by;
         let sqrtXY = Math.sqrt(dirX * dirX + dirY * dirY);
