@@ -58,7 +58,12 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             console.log("Successful Counter Attack of Blue->Yellow!");
             this.hp -= 200;
             this.setGravityY(2000);
-            this.body.setVelocityX(300 * direction);
+            this.body.setVelocityX(200 * direction);
+            this.setTint(this.COLORS.white);
+        }else if(this.scene.green_purple){
+            this.hp -= 250;
+            this.setGravityY(2000);
+            this.body.setVelocity(1000 * direction, -200);
             this.setTint(this.COLORS.white);
         }else{
             this.hp -= 100;
@@ -237,7 +242,7 @@ class OnHitState_Boss extends State {
             self.on_hit(-1);
         }
 
-        scene.time.delayedCall(250, () => {
+        scene.time.delayedCall(600, () => {
             console.log("Collide! Now back to: " + self.basic_state);
             this.stateMachine.transition(self.basic_state);
             this.stateMachine.collision = false;
@@ -290,7 +295,7 @@ class AI_P2 extends State {
             if(rdm >= 0.60){
                 this.stateMachine.transition('AI_P1');
             }else if(rdm >= 0.3){
-                this.stateMachine.transition('idle');
+                this.stateMachine.transition('idle_boss');
             }else{
                 this.stateMachine.transition('P1_sub_1');
             }

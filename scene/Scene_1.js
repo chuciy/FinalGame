@@ -89,6 +89,9 @@ class Scene_1 extends Phaser.Scene {
         if(this.playerFSM.state == "dash" && this.bossFSM.state == "P1_sub_1"){
             this.blue_yellow = true;
         }
+        if(this.playerFSM.state == "kick" && this.bossFSM.state == "AI_P2"){
+            this.green_purple = true;
+        }
 
 
 

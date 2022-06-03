@@ -48,14 +48,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     on_hit(direction){
         //this.scene.sound.play("se0");
-        if(this.general_state != this.GENERAL_STATES.kick){
-            this.hp -= 100;
+        if(this.scene.blue_yellow){
+            this.setTint(this.COLORS.white);
+        }else if(this.scene.green_purple){
+            this.setTint(this.COLORS.white);
+        }else{
+            this.hp -= 50;
+            this.setTint(this.COLORS.dark);
         }
-        
+
         this.setGravityY(2000);
         this.body.setVelocityX(500 * direction);
         this.body.setVelocityY(-1100);
-        this.setTint(this.COLORS.dark);
     }
     on_hit_arrow(){
         this.hp -= 50;
@@ -297,7 +301,7 @@ class OnHitState extends State {
         self.on_hit(-scene.dir);
         self.anims.play("player_falling");
 
-        scene.time.delayedCall(250, () => {
+        scene.time.delayedCall(600, () => {
             this.stateMachine.transition('jump');
             this.stateMachine.collision = false;
             self.setTint(self.COLORS.grey);
