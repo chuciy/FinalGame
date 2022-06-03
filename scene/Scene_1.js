@@ -31,7 +31,7 @@ class Scene_1 extends Phaser.Scene {
 
         //enemy
         this.boss = new Boss(this, 700, 700, 'boss_idle', 0);
-        this.boss.setScale(1.75);
+        this.boss.setScale(2);
         this.bossFSM = new StateMachine("intro_boss", {
             idle_boss: new IdleState_Boss(),
             onhit_boss : new OnHitState_Boss(),
