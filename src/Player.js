@@ -24,13 +24,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         this.general_state = this.GENERAL_STATES.free;
 
+
+        this.COLORS = {
+            white: 0xFFFFFF,
+            grey: 0x808080,
+            red: 0xF04040,
+            green: 0x40F040,
+            blue: 0x4040F0,
+            dark: 0x101010
+        }
     }
     
     on_ground_refresh(){
         this.setGravityY(2000);
         this.falling = false;
         this.jumps = 2;
-        this.clearTint();
+        this.setTint(this.COLORS.grey);
     }
 
     jump_cancel_refresh(){
@@ -46,13 +55,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setGravityY(2000);
         this.body.setVelocityX(500 * direction);
         this.body.setVelocityY(-1100);
-        this.setTint(0x111111);
+        this.setTint(this.COLORS.dark);
     }
     on_hit_arrow(){
         this.hp -= 50;
         this.setGravityY(2000);
         this.body.setVelocity(-this.scene.dir * 100, 0),
-        this.setTint(0x111111);
+        this.setTint(this.COLORS.dark);
     }
 
     on_hit_orb(){
@@ -69,7 +78,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.jumps--;
         this.anims.play("player_jump");
         this.body.setVelocityY(-1000);
-        this.setTint(0xFF8080);
+        this.setTint(this.COLORS.grey);
 
     }
 }
@@ -83,6 +92,9 @@ class IdleState extends State {
 
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
+        const AKey = scene.keys.AKey;
+        const DKey = scene.keys.DKey;
+        const EKey = scene.keys.EKey;
 
         //collision
         if(this.stateMachine.collision){
@@ -107,6 +119,11 @@ class IdleState extends State {
             this.stateMachine.transition('move');
             return;
         }
+
+        if(Phaser.Input.Keyboard.JustDown(DKey)) {
+            this.stateMachine.transition('block');
+            return;
+        }
     }
 
 }
@@ -118,6 +135,9 @@ class MoveState extends State {
     }
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
+        const AKey = scene.keys.AKey;
+        const DKey = scene.keys.DKey;
+        const EKey = scene.keys.EKey;
 
         //collision
         if(this.stateMachine.collision){
@@ -140,6 +160,11 @@ class MoveState extends State {
         if(Phaser.Input.Keyboard.JustDown(space)) {
             self.jump();
             this.stateMachine.transition('jump');
+            return;
+        }
+        //
+        if(Phaser.Input.Keyboard.JustDown(DKey)) {
+            this.stateMachine.transition('block');
             return;
         }
 
@@ -189,7 +214,7 @@ class JumpState extends State {
             return;
         }
 
-        // Input
+        // --------------------------------------Entering Three states:-----------------------------------------------
         if(Phaser.Input.Keyboard.JustDown(AKey)) {
             this.stateMachine.transition('kick');
             return;
@@ -231,7 +256,7 @@ class KickState extends State {
         let direction = self.body.velocity.x;
 
         self.body.setVelocityY(800);
-        self.setTint(0x3030EE);
+        self.setTint(self.COLORS.green);
         self.setGravityY(0);
 
         if(direction >= 0){     // moving right
@@ -268,13 +293,14 @@ class KickState extends State {
 class OnHitState extends State {
     enter(scene, self){
 
-        
+
         self.on_hit(-scene.dir);
+        self.anims.play("player_falling");
 
         scene.time.delayedCall(250, () => {
             this.stateMachine.transition('jump');
             this.stateMachine.collision = false;
-            self.clearTint();
+            self.setTint(self.COLORS.grey);
         });
     }
 
@@ -297,7 +323,7 @@ class OnHitState_Arrow extends State {
             }
             this.stateMachine.collision_arrow = false;
             this.stateMachine.collision_orb = false;
-            self.clearTint();
+            self.setTint(self.COLORS.grey);
         });
     }
 
@@ -314,11 +340,11 @@ class BlockState extends State {
 
         self.setVelocity(0.5 * self.body.velocity.x, 0.07 * self.body.velocity.y);
         self.setGravityY(0);
-        self.setTint(0x10c688);
+        self.setTint(self.COLORS.red);
 
         scene.time.delayedCall(500, () => {
             self.setGravityY(2000);
-            self.clearTint();
+            self.setTint(self.COLORS.grey);
             this.stateMachine.collision = false;
             this.stateMachine.collision_arrow = false;
             this.stateMachine.collision_orb = false;
@@ -335,7 +361,7 @@ class BlockState extends State {
     execute(scene, self){
         if( (this.stateMachine.collision_orb || this.stateMachine.collision) && !self.success_block){
             self.success_block = true;
-            self.setTint(0x00FF00);
+            self.setTint(self.COLORS.red);
             self.setVelocityX(-scene.dir * 800);
             return;
         }
@@ -343,7 +369,7 @@ class BlockState extends State {
             self.anims.play("block_success");
             self.success_block = true;
             scene.on_reflect();
-            self.setTint(0x00FFFF);
+            self.setTint(self.COLORS.red);
             return;
         }
     }
@@ -358,14 +384,14 @@ class DashState extends State {
 
         self.setVelocity(scene.dir * 1000, 0);
         self.setGravityY(0);
-        self.setTint(0x3333F0);
+        self.setTint(self.COLORS.blue);
 
         self.anims.play("player_dash");
 
 
         scene.time.delayedCall(700, () => {
             self.setGravityY(2000);
-            self.clearTint();
+            self.setTint(self.COLORS.grey);
             this.stateMachine.collision = false;
             this.stateMachine.collision_arrow = false;
             this.stateMachine.collision_orb = false;
@@ -397,10 +423,10 @@ class Intro extends State {
         self.x = 50;
         self.y = 150;
         self.setVelocityX(200);
-        self.setTint(0x101010);
+        self.setTint(self.COLORS.dark);
 
         scene.time.delayedCall(1000, () => {
-            self.clearTint();
+            self.setTint(self.COLORS.grey);
             if(self.body.onFloor()){
                 this.stateMachine.transition('idle');
             }else{

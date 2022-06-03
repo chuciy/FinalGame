@@ -30,6 +30,15 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             AI_P1: 'AI_P1',
             AI_P2: "AI_P2"
         }
+
+        this.COLORS = {
+            white: 0xFFFFFF,
+            grey: 0x808080,
+            magenta: 0xE040E0,
+            cyan: 0x40E0E0,
+            yellow: 0xE0E040,
+            dark: 0x101010,
+        }
         this.basic_state = this.BASIC_STATES.idle;
 
         this.in_behavior = false;
@@ -41,12 +50,12 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             this.hp -= 200;
             this.setGravityY(2000);
             this.body.setVelocityX(300 * direction);
-            this.setTint(0xFFFFFF);
+            this.setTint(this.COLORS.white);
         }else{
             this.hp -= 100;
             this.setGravityY(2000);
             this.body.setVelocityX(200 * direction);
-            this.setTint(0x111111);
+            this.setTint(this.COLORS.dark);
         }
     }
 }
@@ -56,7 +65,7 @@ class IdleState_Boss extends State {
         self.anims.play("boss_idle", true);
         console.log("in_idle");
         this.basic_state = self.BASIC_STATES.idle;
-        self.clearTint();
+        self.setTint(self.COLORS.grey);
        
     }
 
@@ -99,7 +108,7 @@ class AI_P1 extends State {
         this.basic_state = self.BASIC_STATES.AI_P1;
         self.anims.play("boss_walk", true);
         console.log("Enter Basic_state: " + this.basic_state);
-        self.setTint(0x00FFFF);
+        self.setTint(self.COLORS.cyan);
 
         self.in_behavior = true;
         scene.time.delayedCall(2500, () => {
@@ -158,7 +167,7 @@ class P1_sub_1 extends State {
         console.log("p1_sub1");
         self.anims.play("boss_jump");
         self.setVelocity(300 * scene.dir, -1200);
-        self.setTint(0xAAAA33);
+        self.setTint(self.COLORS.yellow);
 
         self.setGravityY(0);
 
@@ -222,7 +231,7 @@ class OnHitState_Boss extends State {
             console.log("Collide! Now back to: " + self.basic_state);
             this.stateMachine.transition(self.basic_state);
             this.stateMachine.collision = false;
-            self.clearTint();
+            self.setTint(self.COLORS.grey);
         });
     }
 
@@ -236,7 +245,7 @@ class AI_P2 extends State {
         self.anims.play("boss_walk", true);
         this.basic_state = self.BASIC_STATES.AI_P2;
         console.log("Enter Basic_state: " + this.basic_state);
-        self.setTint(0xEF12FE);
+        self.setTint(self.COLORS.magenta);
 
     }
 
@@ -279,10 +288,10 @@ class Intro_Boss extends State {
         self.x = 1200;
         self.y = 0;
         self.setVelocityX(-200);
-        self.setTint(0x101010);
+        self.setTint(self.COLORS.dark);
 
         scene.time.delayedCall(1000, () => {
-            self.clearTint();
+            self.setTint(self.COLORS.grey);
             this.stateMachine.transition('idle_boss');
         });
     }
