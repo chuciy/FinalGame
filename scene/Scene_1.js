@@ -54,7 +54,8 @@ class Scene_1 extends Phaser.Scene {
             onhit: new OnHitState(),
             onhit_arrow: new OnHitState_Arrow(),
             block: new BlockState(),
-            intro: new Intro()
+            intro: new Intro(),
+            dash: new DashState()
 
 
         }, [this, this.player]);
@@ -66,6 +67,7 @@ class Scene_1 extends Phaser.Scene {
         this.keys = this.input.keyboard.createCursorKeys();
         this.keys.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        this.keys.EKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
         //document.getElementById('info').innerHTML = '<strong>Operation:</strong> Arrows move, SPACE jump, [A] kick, [D] block\n';
 

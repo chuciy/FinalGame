@@ -162,6 +162,7 @@ class JumpState extends State {
         const { left, right, up, down, space, shift } = scene.keys;
         const AKey = scene.keys.AKey;
         const DKey = scene.keys.DKey;
+        const EKey = scene.keys.EKey;
 
         //collision
         if(this.stateMachine.collision){
@@ -198,6 +199,11 @@ class JumpState extends State {
             this.stateMachine.transition('block');
             return;
         }
+        if(Phaser.Input.Keyboard.JustDown(EKey)) {
+            this.stateMachine.transition('dash');
+            return;
+        }
+
 
         // Multiple jump
         if(Phaser.Input.Keyboard.JustDown(space) && self.jumps > 0) {
@@ -322,12 +328,10 @@ class BlockState extends State {
             }else{
                 this.stateMachine.transition('jump');
             }
-            
         });
     }
 
     execute(scene, self){
-
         if( (this.stateMachine.collision_orb || this.stateMachine.collision) && !self.success_block){
             self.success_block = true;
             self.setTint(0x00FF00);
@@ -339,12 +343,48 @@ class BlockState extends State {
             self.success_block = true;
             scene.on_reflect();
             self.setTint(0x00FFFF);
-            
             return;
         }
+    }
+
+}
 
 
+// changes gravity
+class DashState extends State {
+    enter(scene, self){
+        self.general_state = self.GENERAL_STATES.other;
 
+        self.setVelocity(scene.dir * 1000, 0);
+        self.setGravityY(0);
+        self.setTint(0x3333F0);
+
+
+        scene.time.delayedCall(700, () => {
+            self.setGravityY(2000);
+            self.clearTint();
+            this.stateMachine.collision = false;
+            this.stateMachine.collision_arrow = false;
+            this.stateMachine.collision_orb = false;
+            self.success_block = false;
+
+            if(self.body.onFloor()){
+                this.stateMachine.transition('idle');
+            }else{
+                this.stateMachine.transition('jump');
+            }
+
+        });
+    }
+
+    execute(scene, self){
+        if(this.stateMachine.collision_arrow){
+            this.stateMachine.transition('onhit_arrow');
+        }else if(this.stateMachine.collision){
+            this.stateMachine.transition('onhit');
+        }else if(this.stateMachine.collision_orb){
+
+        }
     }
 
 }
