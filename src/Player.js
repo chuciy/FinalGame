@@ -46,13 +46,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setGravityY(2000);
         this.body.setVelocityX(500 * direction);
         this.body.setVelocityY(-1100);
-        this.setTint(0x303030);
+        this.setTint(0x111111);
     }
     on_hit_arrow(){
         this.hp -= 50;
         this.setGravityY(2000);
         this.body.setVelocity(-this.scene.dir * 100, 0),
-        this.setTint(0xEEDD22);
+        this.setTint(0x111111);
     }
 
     on_hit_orb(){
@@ -268,6 +268,7 @@ class KickState extends State {
 class OnHitState extends State {
     enter(scene, self){
 
+        
         self.on_hit(-scene.dir);
 
         scene.time.delayedCall(250, () => {
@@ -358,6 +359,8 @@ class DashState extends State {
         self.setVelocity(scene.dir * 1000, 0);
         self.setGravityY(0);
         self.setTint(0x3333F0);
+
+        self.anims.play("player_dash");
 
 
         scene.time.delayedCall(700, () => {

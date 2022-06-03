@@ -9,6 +9,10 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
         this.hp = 1000;
         this.shoot_cd = 600; //ms
         this.can_shoot = true;
+
+        this.ultra_cd = 500;
+        this.can_ultra = false;
+
         this.projectiles = new Arrows(scene);
         this.orbs = new Orbs(scene);
 
@@ -32,10 +36,18 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
     }
 
     on_hit(direction){
-        this.hp -= 100;
-        this.setGravityY(2000);
-        this.body.setVelocityX(200 * direction);
-        this.setTint(0xFF1010);
+        if(this.scene.blue_yellow){
+            console.log("Successful Counter Attack of Blue->Yellow!");
+            this.hp -= 200;
+            this.setGravityY(2000);
+            this.body.setVelocityX(300 * direction);
+            this.setTint(0xFFFFFF);
+        }else{
+            this.hp -= 100;
+            this.setGravityY(2000);
+            this.body.setVelocityX(200 * direction);
+            this.setTint(0x111111);
+        }
     }
 }
 
@@ -150,9 +162,9 @@ class P1_sub_1 extends State {
 
         self.setGravityY(0);
 
-        self.can_shoot = false;
+        self.can_ultra = false;
         scene.time.delayedCall(1250, () => {
-            self.can_shoot = true;
+            self.can_ultra = true;
             self.setVelocity(100 * scene.dir, 0);
 
         });
@@ -180,7 +192,7 @@ class P1_sub_1 extends State {
             self.y = 200;
         }
 
-        if(self.can_shoot){
+        if(self.can_ultra){
             let rx = 1200 - scene.px; let ry = 675 - scene.px;
             const NUM = 4;
             for(let i = 0; i != NUM; i++){
@@ -188,9 +200,9 @@ class P1_sub_1 extends State {
                 self.orbs.fire_arrow(scene.bx, scene.by, scene.px + (rx / NUM * i), scene.py + (ry / NUM * i));
             }
 
-            self.can_shoot = false;
+            self.can_ultra = false;
             scene.time.delayedCall(self.shoot_cd * 1.8, () => {
-                self.can_shoot = true;
+                self.can_ultra = true;
             });
         }
 

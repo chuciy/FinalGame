@@ -77,11 +77,23 @@ class Scene_1 extends Phaser.Scene {
         if(this.boss.hp <= 0 || this.player.hp <= 0){
             this.scene.start("victory");    
         }
-
+        //scene managed INFO to be passed to FSM
+        //  -coordinates
         this.x_p2b = this.boss.body.x - this.player.body.x;
         this.bx = this.boss.body.x;     this.by = this.boss.body.y;
         this.px = this.player.body.x;   this.py = this.player.body.y;
         this.dir = this.x_p2b >= 0 ? 1 : -1;
+        //  -state INFO used with collision INFO
+        this.green_purple = false;
+        this.blue_yellow = false;
+        if(this.playerFSM.state == "dash" && this.bossFSM.state == "P1_sub_1"){
+            this.blue_yellow = true;
+        }
+
+
+
+
+        //Flipping
         if(this.dir == -1 && this.x_p2b <= -50){
             this.boss.flipX = true;
             this.player.flipX = true;
@@ -210,6 +222,13 @@ class Scene_1 extends Phaser.Scene {
             key: 'boss_jump',
             frames: 'boss_jump',
             frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'player_dash',
+            frames: 'player_dash',
+            frameRate: 30,
             repeat: -1
         });
 
