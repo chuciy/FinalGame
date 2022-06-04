@@ -74,9 +74,17 @@ class Scene_1 extends Phaser.Scene {
 
         //keys
         this.keys = this.input.keyboard.createCursorKeys();
-        this.keys.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.keys.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.keys.EKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+
+        this.Keyboards = {
+            W: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            A: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            I: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I),
+            J: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J),
+            K: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K),
+            L: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L)
+        }
 
         //document.getElementById('info').innerHTML = '<strong>Operation:</strong> Arrows move, SPACE jump, [A] kick, [D] block\n';
 

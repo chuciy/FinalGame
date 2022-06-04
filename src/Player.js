@@ -98,9 +98,7 @@ class IdleState extends State {
 
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
-        const AKey = scene.keys.AKey;
-        const DKey = scene.keys.DKey;
-        const EKey = scene.keys.EKey;
+        const { W, A, S, D, I, J, K, L} = scene.Keyboards;
 
         //collision
         if(this.stateMachine.collision){
@@ -115,18 +113,18 @@ class IdleState extends State {
 
 
         // transition to jump if space pressed
-        if(Phaser.Input.Keyboard.JustDown(space)) {
+        if(Phaser.Input.Keyboard.JustDown(K)) {
             self.jump();
             this.stateMachine.transition('jump');
             return;
         }
         // handle movement
-        if(left.isDown || right.isDown || up.isDown || down.isDown ) {
+        if(A.isDown || D.isDown ) {
             this.stateMachine.transition('move');
             return;
         }
 
-        if(Phaser.Input.Keyboard.JustDown(DKey)) {
+        if(Phaser.Input.Keyboard.JustDown(J)) {
             this.stateMachine.transition('block');
             return;
         }
@@ -141,10 +139,7 @@ class MoveState extends State {
     }
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
-        const AKey = scene.keys.AKey;
-        const DKey = scene.keys.DKey;
-        const EKey = scene.keys.EKey;
-
+        const { W, A, S, D, I, J, K, L} = scene.Keyboards;
         //collision
         if(this.stateMachine.collision){
             this.stateMachine.transition('onhit');
@@ -158,26 +153,26 @@ class MoveState extends State {
 
 
         // transition to idle if not pressing movement keys
-        if(!(left.isDown || right.isDown)) {
+        if(!(A.isDown || D.isDown)) {
             this.stateMachine.transition('idle');
             return;
         }
         // transition to jump if space pressed
-        if(Phaser.Input.Keyboard.JustDown(space)) {
+        if(Phaser.Input.Keyboard.JustDown(K)) {
             self.jump();
             this.stateMachine.transition('jump');
             return;
         }
         //
-        if(Phaser.Input.Keyboard.JustDown(DKey)) {
+        if(Phaser.Input.Keyboard.JustDown(J)) {
             this.stateMachine.transition('block');
             return;
         }
 
         // handle movement
-        if(left.isDown) {
+        if(A.isDown) {
             self.body.setVelocityX(-self.speed);
-        } else if(right.isDown) {
+        } else if(D.isDown) {
             self.body.setVelocityX(self.speed);
         }
 
@@ -191,9 +186,7 @@ class JumpState extends State {
 
     execute(scene, self){
         const { left, right, up, down, space, shift } = scene.keys;
-        const AKey = scene.keys.AKey;
-        const DKey = scene.keys.DKey;
-        const EKey = scene.keys.EKey;
+        const { W, A, S, D, I, J, K, L} = scene.Keyboards;
 
         //collision
         if(this.stateMachine.collision){
@@ -221,32 +214,32 @@ class JumpState extends State {
         }
 
         // --------------------------------------Entering Three states:-----------------------------------------------
-        if(Phaser.Input.Keyboard.JustDown(AKey)) {
+        if(Phaser.Input.Keyboard.JustDown(L)) {
             this.stateMachine.transition('kick');
             return;
         }
 
-        if(Phaser.Input.Keyboard.JustDown(DKey)) {
+        if(Phaser.Input.Keyboard.JustDown(J)) {
             this.stateMachine.transition('block');
             return;
         }
-        if(Phaser.Input.Keyboard.JustDown(EKey)) {
+        if(Phaser.Input.Keyboard.JustDown(I)) {
             this.stateMachine.transition('dash');
             return;
         }
 
 
         // Multiple jump
-        if(Phaser.Input.Keyboard.JustDown(space) && self.jumps > 0) {
+        if(Phaser.Input.Keyboard.JustDown(K) && self.jumps > 0) {
             self.jump();
 
             return;
         }
 
         // handle movement
-        if(left.isDown) {
+        if(A.isDown) {
             self.body.setVelocityX(-self.speed * 1);
-        } else if(right.isDown) {
+        } else if(D.isDown) {
             self.body.setVelocityX( self.speed * 1);
         }
     }
