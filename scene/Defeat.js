@@ -26,6 +26,8 @@ class Defeat extends Phaser.Scene {
         // define keys
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 
+        this.bg = this.add.image(0, 0, 'df').setOrigin(0, 0);
+
     }
 
     update() {

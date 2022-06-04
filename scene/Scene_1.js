@@ -16,7 +16,7 @@ class Scene_1 extends Phaser.Scene {
     create() {
         this.physics.world.setFPS(60);
         //UI
-        this.cameras.main.setBackgroundColor('#DDDDDD');
+        this.cameras.main.setBackgroundColor('#000000');
         this.bg = this.add.image(0, 0, 'bg').setOrigin(0, 0);
         this.p_health_bar = this.makeBar(10,20,0x2ecc71)
         this.b_health_bar = this.makeBar(680,20,0xcc2121)
@@ -97,10 +97,10 @@ class Scene_1 extends Phaser.Scene {
         if(this.player.hp <= 0){
             this.end = true;
             this.cam.pan(this.player.x, this.player.y, 2000, 'Sine.easeInOut');
-            this.cam.zoomTo(1, 10);
+            this.cam.zoomTo(1, 12);
             this.player.setVelocity(0,0);
             this.player.setGravityY(20);
-            this.time.delayedCall(1500, () => {
+            this.time.delayedCall(2000, () => {
                 this.player.anims.play("p_dead");
             });
             this.time.delayedCall(3000, () => {
@@ -121,8 +121,8 @@ class Scene_1 extends Phaser.Scene {
                 this.boss.clearTint();
                 this.boss.anims.play("boss_death");
             });
-            this.time.delayedCall(3000, () => {
-                this.scene.start("defeat");  
+            this.time.delayedCall(2700, () => {
+                this.scene.start("victory");  
             });
             return;
         }
@@ -179,6 +179,7 @@ class Scene_1 extends Phaser.Scene {
         this.playerFSM.collision_arrow = true;
         arrow.setActive(false);
         arrow.setVisible(false);
+        arrow.setVelocity(0,0);
         arrow.x = -50; arrow.y = -50;
     }
 
@@ -186,6 +187,7 @@ class Scene_1 extends Phaser.Scene {
         this.playerFSM.collision_orb = true;
         orb.setActive(false);
         orb.setVisible(false);
+        orb.setVelocity(0,0);
         orb.x = -50; orb.y = -50;
     }
 

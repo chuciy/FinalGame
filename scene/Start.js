@@ -5,7 +5,8 @@ class Start extends Phaser.Scene {
 
     preload() {
         this.load.image('bg', './assets/scene_1_background.png');
-
+        this.load.image("df", "./assets/defeat_scene.png");
+        this.load.image("vc", "./assets/victory_scene.png");
         //boss
         this.load.spritesheet('boss_idle', './assets/drake_idle_sheet.png', {frameWidth: 96, frameHeight: 128, startFrame: 0, endFrame: 3});
         this.load.spritesheet('boss_walk', './assets/drake_walk_sheet.png', {frameWidth: 96, frameHeight: 128, startFrame: 0, endFrame: 3});
@@ -21,7 +22,7 @@ class Start extends Phaser.Scene {
         this.load.spritesheet('player_kick', './assets/knight_player_kick_green_sheet.png', {frameWidth: 64, frameHeight: 48, startFrame: 0, endFrame: 3});
         this.load.spritesheet('player_block', './assets/knight_player_block_red_sheet.png', {frameWidth: 64, frameHeight: 48, startFrame: 0, endFrame: 3});
 
-        this.load.spritesheet('p_dead', './assets/p_dead_example.png', {frameWidth: 48, frameHeight: 48, startFrame: 0, endFrame: 7});
+        this.load.spritesheet('p_dead', './assets/knight_death_sheet.png', {frameWidth: 80, frameHeight: 48, startFrame: 0, endFrame: 7});
 
         //misc
         this.load.spritesheet('arrow', './assets/fireball_cyan_sheet.png', {frameWidth: 32, frameHeight: 32, startFrame: 0, endFrame: 3});

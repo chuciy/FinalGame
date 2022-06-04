@@ -8,6 +8,7 @@ class Victory extends Phaser.Scene {
     }
 
     create() {
+
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Courier',
@@ -25,6 +26,8 @@ class Victory extends Phaser.Scene {
         this.add.text(10, game.config.height/1.5 + 50, 'This is supposed to be a Victory scene\nW to back to start', menuConfig).setOrigin(0);
         // define keys
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+        this.bg = this.add.image(0, 0, 'vc').setOrigin(0, 0);
 
     }
 
