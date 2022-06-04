@@ -65,11 +65,18 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
             this.setGravityY(2000);
             this.body.setVelocity(1000 * direction, -200);
             this.setTint(this.COLORS.white);
+        }else if(this.scene.red_cyan){
+            this.scene.cameras.main.shake(300, 0.03);
+            this.hp -= 100;
+            this.setGravityY(2000);
+            this.body.setVelocityX(200 * direction);
+            this.setTint(this.COLORS.white);
         }else{
             this.hp -= 10;
             this.setGravityY(2000);
             this.body.setVelocityX(200 * direction);
             this.setTint(this.COLORS.dark);
+
         }
     }
 }
@@ -133,7 +140,7 @@ class AI_P1 extends State {
     }
 
     execute(scene, self){
-        if(this.stateMachine.collision){
+        if(this.stateMachine.collision || scene.red_cyan){
             this.stateMachine.transition('onhit_boss');
             return;
         }

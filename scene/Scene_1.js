@@ -29,6 +29,12 @@ class Scene_1 extends Phaser.Scene {
         //create_animation()
         this.create_animation();
 
+        //screen effect
+        this.slash = this.add.sprite(0, 0, "slash").setOrigin(0, 0);
+        this.slash.setVisible(false);
+
+        
+
         //enemy
         this.boss = new Boss(this, 700, 700, 'boss_idle', 0);
         this.boss.setScale(2);
@@ -86,15 +92,14 @@ class Scene_1 extends Phaser.Scene {
         //  -state INFO used with collision INFO
         this.green_purple = false;
         this.blue_yellow = false;
+        this.red_cyan = false;
+
         if(this.playerFSM.state == "dash" && this.bossFSM.state == "P1_sub_1"){
             this.blue_yellow = true;
         }
         if(this.playerFSM.state == "kick" && this.bossFSM.state == "AI_P2"){
             this.green_purple = true;
         }
-
-
-
 
         //Flipping
         if(this.dir == -1 && this.x_p2b <= -50){
@@ -139,8 +144,15 @@ class Scene_1 extends Phaser.Scene {
         orb.setVisible(false);
         orb.x = -50; orb.y = -50;
     }
+
     on_reflect(){
         console.log("arrow reflected");
+        this.red_cyan = true;
+        this.slash.setVisible(true)
+        this.slash.anims.play("slash");
+        this.slash.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+            this.slash.setVisible(false);
+        });
     }
 
 
@@ -229,6 +241,13 @@ class Scene_1 extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'player_kick',
+            frames: 'player_kick',
+            frameRate: 30,
+            repeat: -1
+        });
+
+        this.anims.create({
             key: 'boss_jump',
             frames: 'boss_jump',
             frameRate: 10,
@@ -240,6 +259,13 @@ class Scene_1 extends Phaser.Scene {
             frames: 'player_dash',
             frameRate: 30,
             repeat: -1
+        });
+
+        this.anims.create({
+            key: 'slash',
+            frames: 'slash',
+            frameRate: 30,
+            repeat: 0
         });
 
 

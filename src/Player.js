@@ -29,7 +29,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             white: 0xFFFFFF,
             grey: 0x808080,
             red: 0xF04040,
-            green: 0x40F040,
+            green: 0x50E050,
             blue: 0x8080E0,
             dark: 0x101010
         }
@@ -259,17 +259,15 @@ class KickState extends State {
     enter(scene, self){
         self.general_state = self.GENERAL_STATES.kick;
 
-        let direction = self.body.velocity.x;
 
         self.body.setVelocityY(800);
         self.setTint(self.COLORS.green);
-        self.setGravityY(0);
+        self.setGravityY(1);
+        self.anims.play("player_kick");
 
-        if(direction >= 0){     // moving right
-            self.body.setVelocityX(800);
-        }else{
-            self.body.setVelocityX(-800);
-        }
+
+        self.body.setVelocityX(800 * scene.dir);
+
     }
 
     execute(scene, self){

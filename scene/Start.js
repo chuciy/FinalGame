@@ -17,12 +17,15 @@ class Start extends Phaser.Scene {
         this.load.spritesheet('player_jump', './assets/knight_player_jump_sheet.png', {frameWidth: 48, frameHeight: 48, startFrame: 0, endFrame: 7});
         this.load.spritesheet('player_falling', './assets/knight_player_falling_sheet.png', {frameWidth: 48, frameHeight: 48, startFrame: 0, endFrame: 7});
         this.load.spritesheet('player_dash', './assets/knight_player_dash_blue_sheet.png', {frameWidth: 72, frameHeight: 48, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('player_kick', './assets/knight_player_kick_green_sheet.png', {frameWidth: 64, frameHeight: 48, startFrame: 0, endFrame: 3});
         this.load.spritesheet('player_block', './assets/knight_player_block_red_sheet.png', {frameWidth: 64, frameHeight: 48, startFrame: 0, endFrame: 3});
 
         //misc
         this.load.spritesheet('arrow', './assets/fireball_cyan_sheet.png', {frameWidth: 32, frameHeight: 32, startFrame: 0, endFrame: 3});
         this.load.spritesheet('orb', './assets/fireball_yellow_sheet.png', {frameWidth: 32, frameHeight: 32, startFrame: 0, endFrame: 3});
         this.load.spritesheet('block_success', './assets/Sprite-0001.png', {frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 4});
+        this.load.spritesheet('slash', './assets/screen_slash_sheet.png', {frameWidth: 1200, frameHeight: 675, startFrame: 0, endFrame: 9});
+
     }
 
     create() {
