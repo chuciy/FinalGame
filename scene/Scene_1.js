@@ -21,6 +21,9 @@ class Scene_1 extends Phaser.Scene {
         this.p_health_bar = this.makeBar(10,20,0x2ecc71)
         this.b_health_bar = this.makeBar(680,20,0xcc2121)
 
+        //control
+        this.end = false;
+
 
         //collision info
         this.x_p2b = 500;       // x distance from player to boss: boss.x - player.x
@@ -80,9 +83,21 @@ class Scene_1 extends Phaser.Scene {
     }
 
     update(){
+        if(this.end){return;}
+
         if(this.boss.hp <= 0 || this.player.hp <= 0){
-            this.scene.start("victory");    
+            this.end = true;
+            this.player.setVelocity(0,0);
+            this.player.setGravityY(20);
+            this.time.delayedCall(500, () => {
+                this.player.anims.play("p_dead");
+            });
+            this.time.delayedCall(3000, () => {
+                this.scene.start("victory");  
+            });
+            return;
         }
+
         //scene managed INFO to be passed to FSM
         //  -coordinates
         this.x_p2b = this.boss.body.x - this.player.body.x;
@@ -121,8 +136,8 @@ class Scene_1 extends Phaser.Scene {
 
 
         //Ui
-        this.b_health_bar.scaleX = Math.max(this.boss.hp, 0) / 1000;
-        this.p_health_bar.scaleX = Math.max(this.player.hp, 0) / 1000;
+        this.b_health_bar.scaleX = Math.max(this.boss.hp, 0) / BMHP;
+        this.p_health_bar.scaleX = Math.max(this.player.hp, 0) / PMHP;
     }
 
     on_collision_pb(){
@@ -265,6 +280,13 @@ class Scene_1 extends Phaser.Scene {
             key: 'slash',
             frames: 'slash',
             frameRate: 30,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'p_dead',
+            frames: 'p_dead',
+            frameRate: 8,
             repeat: 0
         });
 

@@ -6,7 +6,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 
         // set properties
-        this.hp = 1000;
+        this.hp = PMHP;
         this.speed = 200;
         this.jumps = 2;
         this.success_block = false;

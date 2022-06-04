@@ -20,6 +20,8 @@ class Start extends Phaser.Scene {
         this.load.spritesheet('player_kick', './assets/knight_player_kick_green_sheet.png', {frameWidth: 64, frameHeight: 48, startFrame: 0, endFrame: 3});
         this.load.spritesheet('player_block', './assets/knight_player_block_red_sheet.png', {frameWidth: 64, frameHeight: 48, startFrame: 0, endFrame: 3});
 
+        this.load.spritesheet('p_dead', './assets/p_dead_example.png', {frameWidth: 48, frameHeight: 48, startFrame: 0, endFrame: 7});
+
         //misc
         this.load.spritesheet('arrow', './assets/fireball_cyan_sheet.png', {frameWidth: 32, frameHeight: 32, startFrame: 0, endFrame: 3});
         this.load.spritesheet('orb', './assets/fireball_yellow_sheet.png', {frameWidth: 32, frameHeight: 32, startFrame: 0, endFrame: 3});

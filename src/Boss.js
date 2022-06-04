@@ -6,7 +6,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
 
         // set properties
-        this.hp = 1500;
+        this.hp = BMHP;
         this.shoot_cd = 600; //ms
         this.can_shoot = true;
 
