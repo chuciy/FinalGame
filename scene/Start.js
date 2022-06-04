@@ -7,6 +7,7 @@ class Start extends Phaser.Scene {
         this.load.image('bg', './assets/scene_1_background.png');
         this.load.image("df", "./assets/defeat_scene.png");
         this.load.image("vc", "./assets/victory_scene.png");
+        this.load.image("st", "./assets/start_scene.png");
         //boss
         this.load.spritesheet('boss_idle', './assets/drake_idle_sheet.png', {frameWidth: 96, frameHeight: 128, startFrame: 0, endFrame: 3});
         this.load.spritesheet('boss_walk', './assets/drake_walk_sheet.png', {frameWidth: 96, frameHeight: 128, startFrame: 0, endFrame: 3});
@@ -50,6 +51,8 @@ class Start extends Phaser.Scene {
         this.add.text(10, game.config.height/1.5 + 50, 'This is supposed to be a Start scene\nW to start', menuConfig).setOrigin(0);
         // define keys
         this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+        this.bg = this.add.image(0, 0, 'st').setOrigin(0, 0);
 
     }
 
