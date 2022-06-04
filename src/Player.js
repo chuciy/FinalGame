@@ -43,7 +43,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     jump_cancel_refresh(){
-        console.log("you just triggered what is called jc");
+        console.log("'I am a dropped feature, but I am still here'");
     }
 
     on_hit(direction){
@@ -71,12 +71,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     on_hit_orb(){
-        /*
-        this.hp -= 30;
-        this.setGravityY(2000);
-        this.body.setVelocity(-this.scene.dir * 50, 0),
-        this.setTint(0xDEDE22);
-        */
+        console.log("'on_hit_arrow() is doing my job rn'");
     }
 
 

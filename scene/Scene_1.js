@@ -23,6 +23,7 @@ class Scene_1 extends Phaser.Scene {
 
         //control
         this.end = false;
+        this.cam = this.cameras.main;
 
 
         //collision info
@@ -95,9 +96,11 @@ class Scene_1 extends Phaser.Scene {
 
         if(this.player.hp <= 0){
             this.end = true;
+            this.cam.pan(this.player.x, this.player.y, 2000, 'Sine.easeInOut');
+            this.cam.zoomTo(1, 10);
             this.player.setVelocity(0,0);
             this.player.setGravityY(20);
-            this.time.delayedCall(500, () => {
+            this.time.delayedCall(1500, () => {
                 this.player.anims.play("p_dead");
             });
             this.time.delayedCall(3000, () => {
@@ -107,14 +110,19 @@ class Scene_1 extends Phaser.Scene {
         }
 
         if(this.boss.hp <= 0){
+            this.boss.clearTint();
             this.end = true;
-            this.player.setVelocity(0,0);
-            this.player.setGravityY(20);
-            this.time.delayedCall(500, () => {
-                this.player.anims.play("p_dead");
+            this.cam.pan(this.boss.x, this.boss.y, 2000, 'Sine.easeInOut');
+            this.cam.zoomTo(1, 10);
+            this.boss.setVelocity(0,0);
+            this.boss.setGravityY(-20);
+            this.time.delayedCall(1500, () => {
+                this.boss.setGravityY(-20);
+                this.boss.clearTint();
+                this.boss.anims.play("boss_death");
             });
             this.time.delayedCall(3000, () => {
-                this.scene.start("victory");  
+                this.scene.start("defeat");  
             });
             return;
         }
@@ -217,6 +225,12 @@ class Scene_1 extends Phaser.Scene {
             frames: 'boss_idle',
             frameRate: 5,
             repeat: -1
+        });
+        this.anims.create({
+            key: 'boss_death',
+            frames: 'boss_death',
+            frameRate: 10,
+            repeat: 0
         });
         this.anims.create({
             key: 'boss_walk',
