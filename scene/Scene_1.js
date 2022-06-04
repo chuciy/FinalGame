@@ -85,7 +85,20 @@ class Scene_1 extends Phaser.Scene {
     update(){
         if(this.end){return;}
 
-        if(this.boss.hp <= 0 || this.player.hp <= 0){
+        if(this.player.hp <= 0){
+            this.end = true;
+            this.player.setVelocity(0,0);
+            this.player.setGravityY(20);
+            this.time.delayedCall(500, () => {
+                this.player.anims.play("p_dead");
+            });
+            this.time.delayedCall(3000, () => {
+                this.scene.start("defeat");  
+            });
+            return;
+        }
+
+        if(this.boss.hp <= 0){
             this.end = true;
             this.player.setVelocity(0,0);
             this.player.setGravityY(20);
