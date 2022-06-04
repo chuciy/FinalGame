@@ -1,8 +1,8 @@
 const WIDTH = 1200;
 const HEIGHT = 675;
 
-const BMHP = 1000;
-const PMHP = 1000;
+const BMHP = 1200;
+const PMHP = 600;
 
 
 let game = new Phaser.Game({
