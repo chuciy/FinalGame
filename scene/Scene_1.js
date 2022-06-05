@@ -11,6 +11,12 @@ class Scene_1 extends Phaser.Scene {
 
 
         this.load.audio('se0', 'assets/se0.wav');
+        this.load.audio('p_dmg', 'assets/player_damage.wav');
+        this.load.audio('p_death', 'assets/player_death.wav');
+        this.load.audio('rb', 'assets/red_block_damage.wav');
+        this.load.audio('yf', 'assets/yellow_fireball.wav');
+        this.load.audio('yj', 'assets/yellow_jump.wav');
+
     }
 
     create() {
@@ -101,6 +107,7 @@ class Scene_1 extends Phaser.Scene {
             this.player.setVelocity(0,0);
             this.player.setGravityY(20);
             this.time.delayedCall(2000, () => {
+                this.sound.play("p_death");
                 this.player.anims.play("p_dead");
             });
             this.time.delayedCall(3000, () => {
@@ -192,6 +199,7 @@ class Scene_1 extends Phaser.Scene {
     }
 
     on_reflect(){
+        this.sound.play("rb");
         console.log("arrow reflected");
         this.red_cyan = true;
         this.slash.setVisible(true)

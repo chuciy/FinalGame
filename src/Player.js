@@ -47,7 +47,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     on_hit(direction){
-        //this.scene.sound.play("se0");
         if(this.scene.blue_yellow){
             this.setTint(this.COLORS.white);
             this.scene.cameras.main.shake(300, 0.03);
@@ -55,6 +54,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setTint(this.COLORS.white);
             this.scene.cameras.main.shake(300, 0.03);
         }else{
+            this.scene.sound.play("p_dmg");
             this.hp -= 50;
             this.setTint(this.COLORS.dark);
         }

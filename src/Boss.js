@@ -190,6 +190,7 @@ class AI_P1 extends State {
 // just too lazy to fix the naming
 class P1_sub_1 extends State {
     enter(scene, self){
+        scene.sound.play('yj');
         console.log("p1_sub1");
         self.anims.play("boss_jump");
         self.setVelocity(300 * scene.dir, -1200);
@@ -226,6 +227,7 @@ class P1_sub_1 extends State {
         if(self.can_ultra){
             let rx = 1200 - scene.px; let ry = 675 - scene.px;
             const NUM = 4;
+            scene.sound.play('yf');
             for(let i = 0; i != NUM; i++){
                 self.orbs.fire_arrow(scene.bx, scene.by, scene.px / NUM * i, scene.py / NUM * i);
                 self.orbs.fire_arrow(scene.bx, scene.by, scene.px + (rx / NUM * i), scene.py + (ry / NUM * i));
