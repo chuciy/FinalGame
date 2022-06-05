@@ -16,6 +16,12 @@ class Scene_1 extends Phaser.Scene {
         this.load.audio('rb', 'assets/red_block_damage.wav');
         this.load.audio('yf', 'assets/yellow_fireball.wav');
         this.load.audio('yj', 'assets/yellow_jump.wav');
+        this.load.audio('md', 'assets/magenta_dash.wav');
+        this.load.audio('bd', 'assets/blue_dash.wav');
+        this.load.audio('cf', 'assets/cyan_fireball.wav');
+        this.load.audio('d_death', 'assets/dragon_death.wav');
+        this.load.audio('d_dmg', 'assets/dragon_damage.wav');
+        this.load.audio('gk', 'assets/green_kick.wav');
 
     }
 
@@ -117,6 +123,7 @@ class Scene_1 extends Phaser.Scene {
         }
 
         if(this.boss.hp <= 0){
+            this.sound.play('d_death');
             this.boss.clearTint();
             this.end = true;
             this.cam.pan(this.boss.x, this.boss.y, 2000, 'Sine.easeInOut');

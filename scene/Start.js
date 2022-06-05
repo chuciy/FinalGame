@@ -31,6 +31,8 @@ class Start extends Phaser.Scene {
         this.load.spritesheet('block_success', './assets/Sprite-0001.png', {frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 4});
         this.load.spritesheet('slash', './assets/screen_slash_sheet.png', {frameWidth: 1200, frameHeight: 675, startFrame: 0, endFrame: 9});
 
+        this.load.audio('s', 'assets/move_scenes.wav');
+
     }
 
     create() {
@@ -58,7 +60,7 @@ class Start extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.keyW)) {
-
+          this.sound.play("s");
           this.scene.start("scene_1");    
         }
       }

@@ -7,7 +7,7 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
         // set properties
         this.hp = BMHP;
-        this.shoot_cd = 600; //ms
+        this.shoot_cd = 800; //ms
         this.can_shoot = true;
 
         this.ultra_cd = 500;
@@ -55,23 +55,26 @@ class Boss extends Phaser.Physics.Arcade.Sprite {
 
     on_hit(direction){
         if(this.scene.blue_yellow){
-            console.log("Successful Counter Attack of Blue->Yellow!");
+            this.scene.sound.play("se0");
             this.hp -= 200;
             this.setGravityY(2000);
             this.body.setVelocityX(200 * direction);
             this.setTint(this.COLORS.white);
         }else if(this.scene.green_purple){
+            this.scene.sound.play("se0");
             this.hp -= 250;
             this.setGravityY(2000);
             this.body.setVelocity(1000 * direction, -200);
             this.setTint(this.COLORS.white);
         }else if(this.scene.red_cyan){
+            this.scene.sound.play("se0");
             this.scene.cameras.main.shake(300, 0.03);
             this.hp -= 100;
             this.setGravityY(2000);
             this.body.setVelocityX(200 * direction);
             this.setTint(this.COLORS.white);
         }else{
+            this.scene.sound.play("d_dmg");
             this.hp -= 10;
             this.setGravityY(2000);
             this.body.setVelocityX(200 * direction);
@@ -156,6 +159,7 @@ class AI_P1 extends State {
         }
         //Shoot arrows in parabola
         if(self.can_shoot){
+            scene.sound.play("cf");
             self.projectiles.fire_arrow(scene.bx, scene.by, scene.px, scene.py);
             self.can_shoot = false;
             scene.time.delayedCall(self.shoot_cd, () => {
@@ -266,6 +270,7 @@ class OnHitState_Boss extends State {
 
 class AI_P2 extends State {
     enter(scene, self){
+        scene.sound.play("md");
         self.anims.play("boss_walk", true);
         this.basic_state = self.BASIC_STATES.AI_P2;
         console.log("Enter Basic_state: " + this.basic_state);

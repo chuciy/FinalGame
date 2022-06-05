@@ -247,6 +247,7 @@ class KickState extends State {
     enter(scene, self){
         self.general_state = self.GENERAL_STATES.kick;
 
+        scene.sound.play("gk");
 
         self.body.setVelocityY(800);
         self.setTint(self.COLORS.green);
@@ -381,6 +382,7 @@ class DashState extends State {
 
         self.anims.play("player_dash");
 
+        scene.sound.play("bd");
 
         scene.time.delayedCall(700, () => {
             self.setGravityY(2000);
